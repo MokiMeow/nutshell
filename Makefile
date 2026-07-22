@@ -17,7 +17,9 @@ CFLAGS  := -std=c11 -m64 -ffreestanding -fno-pic -fno-pie \
            -mno-red-zone -mno-mmx -mno-sse -mno-sse2 \
            -fno-stack-protector -fno-asynchronous-unwind-tables \
            -Wall -Wextra -Iinclude -c
-LDFLAGS := -n -T linker.ld
+# --no-warn-rwx-segments: the kernel is one flat LOAD segment (R+W+X) on
+# purpose; silence the otherwise-harmless linker warning about it.
+LDFLAGS := -n -T linker.ld --no-warn-rwx-segments
 
 BUILD   := build
 ISO_DIR := $(BUILD)/isofiles
