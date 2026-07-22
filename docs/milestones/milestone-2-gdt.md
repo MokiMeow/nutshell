@@ -1,4 +1,4 @@
-# Milestone 2 — Global Descriptor Table
+# Milestone 2 — Global Descriptor Table ✅ (done)
 
 **Goal:** replace the throwaway boot GDT with a proper 64-bit GDT set up in C,
 including a TSS, so the IDT (milestone 3) has a stable code selector to target.
@@ -11,13 +11,13 @@ Segment and why long mode still needs one (interrupt stack pointers).
 
 ## Tasks
 
-- [ ] Add `src/gdt.c` + `include/gdt.h` that builds a GDT with: null, 64-bit
+- [x] Add `src/gdt.c` + `include/gdt.h` that builds a GDT with: null, 64-bit
       kernel code, kernel data, and a TSS descriptor.
-- [ ] Fill and load a `struct tss` (at least `rsp0` and an IST entry for a
+- [x] Fill and load a `struct tss` (at least `rsp0` and an IST entry for a
       double-fault stack — the double-fault handler in M3 will use it).
-- [ ] Load the GDT with `lgdt` and reload segment registers; `ltr` to load the
+- [x] Load the GDT with `lgdt` and reload segment registers; `ltr` to load the
       task register.
-- [ ] Call `gdt_init()` first thing in `kernel_main`; print `[ok] gdt`.
+- [x] Call `gdt_init()` first thing in `kernel_main`; print `[ok] gdt`.
 
 ## Files
 
@@ -25,9 +25,9 @@ Segment and why long mode still needs one (interrupt stack pointers).
 
 ## Definition of Done
 
-- [ ] Kernel boots with the C-defined GDT loaded (still reaches the banner).
-- [ ] The TSS is loaded (`ltr` succeeds); a known-good `rsp0`/IST is set.
-- [ ] `make iso` clean, `make run` boots, CI green.
+- [x] Kernel boots with the C-defined GDT loaded (still reaches the banner).
+- [x] The TSS is loaded (`ltr` succeeds); a known-good `rsp0`/IST is set.
+- [x] `make iso` clean, `make run` boots, CI green.
 
 ## References
 

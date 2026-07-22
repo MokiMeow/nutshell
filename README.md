@@ -67,8 +67,8 @@ QEMU + GDB workflow.
 
 ## Status
 
-Milestone 1 (formatted VGA + serial output) is **done** — the repo builds and
-boots today with `kprintf` available for later subsystem diagnostics. The road
+Milestone 2 (the runtime GDT and TSS) is **done** — the repo builds and boots
+today with `kprintf` available for later subsystem diagnostics. The road
 from here to a working shell is tracked, milestone by milestone, in
 [docs/04-roadmap.md](docs/04-roadmap.md).
 
@@ -76,7 +76,7 @@ from here to a working shell is tracked, milestone by milestone, in
 |---|-----------|-------|
 | 0 | Boot to 64-bit long mode | ✅ done |
 | 1 | Screen + serial I/O (`kprintf`) | ✅ done |
-| 2 | Global Descriptor Table | ⬜ |
+| 2 | Global Descriptor Table | ✅ done |
 | 3 | Interrupts (IDT + PIC + timer) | ⬜ |
 | 4 | PS/2 keyboard driver | ⬜ |
 | 5 | Physical memory + kernel heap | ⬜ |

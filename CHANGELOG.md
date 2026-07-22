@@ -7,6 +7,8 @@ to follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ## [Unreleased]
 
 ### Added
+- Milestone 2: a runtime 64-bit GDT, kernel code/data descriptors, and a loaded
+  TSS with dedicated ring-0 and double-fault stacks.
 - Milestone 1: freestanding memory and string helpers, integer formatting, and
   `kprintf` output mirrored to VGA text mode and COM1 serial.
 - Milestone 0: bootable skeleton — multiboot2 header, 32→64-bit long-mode

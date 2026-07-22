@@ -70,6 +70,13 @@ The 64-bit stub zeroes the data segment registers (segmentation is effectively
 off in long mode, but the registers should hold the null selector) and `call`s
 `kernel_main`. If `kernel_main` ever returns, we halt in a loop.
 
+The two-entry GDT used for this transition is deliberately temporary. The
+first operation in `kernel_main` is `gdt_init()`, which installs the runtime
+GDT with kernel code and data segments plus a 64-bit TSS descriptor. The TSS
+provides a known ring-0 stack and an IST stack reserved for double faults; the
+runtime table is activated with `lgdt`, a far return reloads CS, and `ltr`
+loads the task register.
+
 ## Why this design
 
 - **GRUB + multiboot2** instead of a hand-rolled boot sector: writing a
