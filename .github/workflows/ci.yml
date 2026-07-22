@@ -1,0 +1,33 @@
+name: build
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-boot:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install toolchain
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y nasm gcc make binutils \
+            xorriso grub-pc-bin grub-common mtools qemu-system-x86
+
+      - name: Build ISO
+        run: make iso
+
+      - name: Smoke-boot in QEMU and check serial output
+        run: |
+          timeout 20 qemu-system-x86_64 \
+            -cdrom build/nutshell.iso \
+            -display none \
+            -serial file:serial.log \
+            -no-reboot || true
+          echo "----- serial.log -----"
+          cat serial.log || true
+          grep -q "Nutshell" serial.log
