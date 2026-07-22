@@ -31,6 +31,15 @@ size_t strlen(const char *string) {
     return length;
 }
 
+int strcmp(const char *left, const char *right) {
+    while (*left != '\0' && *left == *right) {
+        left++;
+        right++;
+    }
+
+    return (unsigned char)*left - (unsigned char)*right;
+}
+
 char *utoa(uint64_t value, char *buffer, unsigned int base) {
     static const char digits[] = "0123456789abcdef";
     size_t length = 0;

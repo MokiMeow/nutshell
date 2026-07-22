@@ -27,21 +27,10 @@ static size_t align_size(size_t size) {
 }
 
 bool heap_init(void) {
-    uintptr_t first_frame = 0;
+    uintptr_t first_frame = pmm_alloc_contiguous(HEAP_FRAME_COUNT);
 
-    for (size_t i = 0; i < HEAP_FRAME_COUNT; i++) {
-        uintptr_t frame = pmm_alloc();
-
-        if (frame == 0 || (i > 0 && frame != first_frame + i * PMM_PAGE_SIZE)) {
-            if (frame != 0)
-                pmm_free(frame);
-            for (size_t j = 0; j < i; j++)
-                pmm_free(first_frame + j * PMM_PAGE_SIZE);
-            return false;
-        }
-        if (i == 0)
-            first_frame = frame;
-    }
+    if (first_frame == 0)
+        return false;
 
     heap_base = (uint8_t *)first_frame;
     heap_capacity = HEAP_FRAME_COUNT * PMM_PAGE_SIZE;

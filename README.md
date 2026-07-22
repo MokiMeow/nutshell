@@ -67,9 +67,9 @@ QEMU + GDB workflow.
 
 ## Status
 
-Milestone 5 (physical memory and the kernel heap) is **done** — the repo builds
-and boots today with self-tested frame and byte allocators. The road
-from here to a working shell is tracked, milestone by milestone, in
+Milestone 6 (the interactive shell) is **done** — the repo boots to
+`nutshell> ` with all built-in commands working. The final portfolio pass
+is tracked as milestone 7 in
 [docs/04-roadmap.md](docs/04-roadmap.md).
 
 | # | Milestone | State |
@@ -80,7 +80,7 @@ from here to a working shell is tracked, milestone by milestone, in
 | 3 | Interrupts (IDT + PIC + timer) | ✅ done |
 | 4 | PS/2 keyboard driver | ✅ done |
 | 5 | Physical memory + kernel heap | ✅ done |
-| 6 | The shell | ⬜ |
+| 6 | The shell | ✅ done |
 | 7 | Polish, tests, portfolio pass | ⬜ |
 
 ## Repository layout

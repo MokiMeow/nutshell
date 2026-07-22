@@ -199,12 +199,26 @@ bool pmm_init(uintptr_t multiboot_info_address) {
 }
 
 uintptr_t pmm_alloc(void) {
-    for (uint64_t frame = 0; frame < frame_count; frame++) {
-        if (!frame_is_used(frame)) {
-            mark_frame_used(frame);
-            mark_frame_allocated(frame);
-            return frame * PMM_PAGE_SIZE;
+    return pmm_alloc_contiguous(1);
+}
+
+uintptr_t pmm_alloc_contiguous(size_t count) {
+    if (count == 0 || count > frame_count)
+        return 0;
+
+    for (uint64_t start = 0; start + count <= frame_count; start++) {
+        size_t available = 0;
+
+        while (available < count && !frame_is_used(start + available))
+            available++;
+        if (available == count) {
+            for (size_t offset = 0; offset < count; offset++) {
+                mark_frame_used(start + offset);
+                mark_frame_allocated(start + offset);
+            }
+            return start * PMM_PAGE_SIZE;
         }
+        start += available;
     }
 
     return 0;

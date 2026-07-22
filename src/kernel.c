@@ -13,6 +13,7 @@
 #include "pic.h"
 #include "pmm.h"
 #include "serial.h"
+#include "shell.h"
 #include "timer.h"
 #include "vga.h"
 
@@ -27,8 +28,6 @@ static void init_failure(const char *subsystem) {
 }
 
 void kernel_main(uintptr_t multiboot_info_address) {
-    struct memory_stats memory;
-
     gdt_init();
     serial_init();
     vga_clear();
@@ -67,15 +66,7 @@ void kernel_main(uintptr_t multiboot_info_address) {
     vga_set_color(VGA_LIGHT_GREEN, VGA_BLACK);
     kprintf("%s", BANNER);
     vga_set_color(VGA_LIGHT_GREY, VGA_BLACK);
-    memory = mem_stats();
-    kprintf("Memory: total=%u used=%u free=%u frames, heap=%u/%u bytes\n",
-            (unsigned int)memory.total_frames,
-            (unsigned int)memory.used_frames,
-            (unsigned int)memory.free_frames,
-            (unsigned int)memory.heap_used,
-            (unsigned int)memory.heap_capacity);
-    kprintf("Milestone 5 complete.\n");
-
-    for (;;)
-        __asm__ volatile ("hlt");
+    kprintf("[ok] shell\n");
+    kprintf("Milestone 6 complete.\n");
+    shell_run();
 }

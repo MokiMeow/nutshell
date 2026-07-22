@@ -39,7 +39,7 @@ tiny; the shell's value is the *machinery*, not a big command set.
 ## Command table pattern
 
 ```c
-typedef int (*cmd_fn)(int argc, char **argv);
+typedef void (*cmd_fn)(int argc, char **argv);
 
 struct command {
     const char *name;
@@ -64,6 +64,32 @@ Dispatch is a linear search over this table — clear and more than fast enough.
 A minimal tokenizer: split the input line on runs of spaces into an `argv`
 array (fixed max args), null-terminate each token in place. No quoting, no pipes
 in v1 — those are stretch goals.
+
+The implementation uses a 128-byte input line and at most 16 arguments.
+Backspace edits only when the line is non-empty, overlong printable input is
+ignored safely, and empty lines immediately produce another prompt.
+
+## Manual acceptance test
+
+Run `make run`, then type the following at successive prompts:
+
+| Input | Expected result |
+|-------|-----------------|
+| `help` | Lists all seven built-ins with one-line descriptions. |
+| `echo hello world` | Prints `hello world`. |
+| `mem` | Prints total/used/free frames and heap bytes. |
+| `uptime` | Prints elapsed whole seconds. |
+| `does-not-exist` | Prints a friendly unknown-command message and another prompt. |
+| Backspace while editing | Removes the previous character without underflowing an empty line. |
+| `clear` | Clears VGA and places the next prompt at the top left. |
+| `panic` | Prints a vector-0 fault report and halts. |
+| `reboot` | Prints `Rebooting...` and resets through the 8042 controller. |
+
+For a headless smoke test, boot with serial redirected to `serial.log` and the
+QEMU monitor on standard input, then issue `sendkey` commands for `help` and
+`echo hello world`. The milestone verification captured both command outputs,
+memory/uptime output, unknown and empty-line recovery, and a successful reset
+under `-no-reboot`.
 
 ## What to demonstrate (the GIF)
 

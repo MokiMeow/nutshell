@@ -7,6 +7,9 @@ to follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ## [Unreleased]
 
 ### Added
+- Milestone 6: an interactive `nutshell> ` REPL with line editing, tokenized
+  command dispatch, and `help`, `echo`, `clear`, `mem`, `uptime`, `reboot`, and
+  `panic` built-ins.
 - Milestone 5: multiboot memory-map parsing, a bitmap physical-frame allocator,
   and a PMM-backed 64 KiB first-fit heap with block splitting and coalescing.
 - Milestone 4: an IRQ1 PS/2 keyboard driver with scancode-set-1 decoding,
