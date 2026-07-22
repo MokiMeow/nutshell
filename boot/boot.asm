@@ -9,12 +9,14 @@
 ;   4. load a 64-bit GDT and far-jump into 64-bit code.
 
 global start
+global multiboot_info
 extern long_mode_start
 
 section .text
 bits 32
 start:
     mov esp, stack_top          ; set up a stack
+    mov [multiboot_info], ebx   ; CPUID clobbers ebx; preserve GRUB's pointer
 
     call check_multiboot
     call check_cpuid
@@ -134,6 +136,8 @@ p2_table:
 stack_bottom:
     resb 4096 * 4              ; 16 KiB boot stack
 stack_top:
+multiboot_info:
+    resd 1
 
 section .rodata
 gdt64:

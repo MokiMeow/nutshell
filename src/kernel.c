@@ -6,10 +6,12 @@
  * Everything past this banner is the work laid out in docs/milestones/. */
 
 #include "gdt.h"
+#include "heap.h"
 #include "idt.h"
 #include "kprintf.h"
 #include "keyboard.h"
 #include "pic.h"
+#include "pmm.h"
 #include "serial.h"
 #include "timer.h"
 #include "vga.h"
@@ -17,7 +19,16 @@
 static const char *BANNER =
     "Nutshell v0.1.0 - booted into 64-bit long mode.\n";
 
-void kernel_main(void) {
+static void init_failure(const char *subsystem) {
+    kprintf("[FAIL] %s\n", subsystem);
+    __asm__ volatile ("cli");
+    for (;;)
+        __asm__ volatile ("hlt");
+}
+
+void kernel_main(uintptr_t multiboot_info_address) {
+    struct memory_stats memory;
+
     gdt_init();
     serial_init();
     vga_clear();
@@ -25,6 +36,20 @@ void kernel_main(void) {
     kprintf("[ok] gdt\n");
     kprintf("[ok] serial\n");
     kprintf("[ok] vga\n");
+
+    if (!pmm_init(multiboot_info_address))
+        init_failure("pmm");
+    kprintf("[ok] pmm\n");
+    if (!pmm_self_test())
+        init_failure("pmm-selftest");
+    kprintf("[ok] pmm-selftest\n");
+
+    if (!heap_init())
+        init_failure("heap");
+    kprintf("[ok] heap\n");
+    if (!heap_self_test())
+        init_failure("heap-selftest");
+    kprintf("[ok] heap-bump-selftest\n");
 
     idt_init();
     kprintf("[ok] idt\n");
@@ -42,8 +67,15 @@ void kernel_main(void) {
     vga_set_color(VGA_LIGHT_GREEN, VGA_BLACK);
     kprintf("%s", BANNER);
     vga_set_color(VGA_LIGHT_GREY, VGA_BLACK);
-    kprintf("Milestone 4 complete. Keyboard echo test:\n");
+    memory = mem_stats();
+    kprintf("Memory: total=%u used=%u free=%u frames, heap=%u/%u bytes\n",
+            (unsigned int)memory.total_frames,
+            (unsigned int)memory.used_frames,
+            (unsigned int)memory.free_frames,
+            (unsigned int)memory.heap_used,
+            (unsigned int)memory.heap_capacity);
+    kprintf("Milestone 5 bump allocator online.\n");
 
     for (;;)
-        kprintf("%c", keyboard_getchar());
+        __asm__ volatile ("hlt");
 }

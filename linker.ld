@@ -34,4 +34,7 @@ SECTIONS {
     {
         *(.bss)
     }
+
+    . = ALIGN(4K);
+    end = .;
 }

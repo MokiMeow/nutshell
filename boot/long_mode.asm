@@ -7,6 +7,7 @@
 
 global long_mode_start
 extern kernel_main
+extern multiboot_info
 
 section .text
 bits 64
@@ -18,6 +19,7 @@ long_mode_start:
     mov fs, ax
     mov gs, ax
 
+    mov edi, [rel multiboot_info] ; SysV arg 1: multiboot2 pointer
     call kernel_main
 
     ; kernel_main should never return; if it does, halt forever.
