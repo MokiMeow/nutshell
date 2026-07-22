@@ -7,6 +7,8 @@ to follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ## [Unreleased]
 
 ### Added
+- Milestone 5: multiboot memory-map parsing, a bitmap physical-frame allocator,
+  and a PMM-backed 64 KiB first-fit heap with block splitting and coalescing.
 - Milestone 4: an IRQ1 PS/2 keyboard driver with scancode-set-1 decoding,
   Shift handling, and a fixed-size input ring buffer.
 - Milestone 3: a 256-entry IDT, uniform exception/IRQ assembly stubs, fault

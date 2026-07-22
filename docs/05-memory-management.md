@@ -22,21 +22,29 @@ multiboot memory map   ← what RAM actually exists
 ## Layer 1 — knowing what RAM exists
 
 GRUB gives us a **memory map** in the multiboot2 info structure (the pointer
-GRUB left in `ebx` at boot, which we save in milestone 0/1). It lists regions
+GRUB left in `ebx` at boot, which the 32-bit entry saves before CPUID can
+clobber it and the 64-bit stub passes to `kernel_main`). It lists regions
 and whether each is usable. We walk it to find the largest usable region above
 the kernel image.
 
 Key addresses we must not stomp:
 - below 1 MiB: BIOS/VGA/legacy — off limits.
 - the kernel image itself (`1 MiB … end`) — the linker can export an `end`
-  symbol so we know where free memory starts.
+symbol so we know where free memory starts.
+- the multiboot info structure itself — it remains reserved after parsing.
+
+Only frames below **1 GiB** are managed because that is the region mapped by
+the early page tables. Returning higher physical addresses before extending
+the page tables would hand callers inaccessible memory.
 
 ## Layer 2 — physical frame allocator (`src/pmm.c`)
 
 Hand out and reclaim 4 KiB physical frames. The simplest solid design is a
 **bitmap**: one bit per frame, 0 = free, 1 = used. Mark the kernel and reserved
 regions used at init; `pmm_alloc()` scans for a free bit, `pmm_free()` clears
-one.
+one. A second ownership bitmap records which used frames were actually handed
+out, so invalid frees cannot release the kernel, multiboot data, or reserved
+hardware regions.
 
 - Pros: simple, O(n) scan is fine at this scale, easy to reason about.
 - Alternative: a free-list stack of frames (O(1) alloc/free) — a reasonable
@@ -54,6 +62,12 @@ one.
 
 Ship the bump allocator to unblock the shell, then upgrade to the free-list
 heap — each is its own commit.
+
+The final heap owns 16 consecutive PMM frames (64 KiB). Payloads are aligned to
+16 bytes. Allocation uses first-fit and splits blocks when the remainder is
+useful; freeing merges adjacent blocks in both directions. The boot self-test
+mixes allocations and frees, verifies live payload contents, and checks that
+the arena coalesces back into one block.
 
 ## What to demonstrate in the README
 

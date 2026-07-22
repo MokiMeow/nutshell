@@ -43,8 +43,9 @@ Lower layers never call up; upper layers depend only on the layers beneath.
   first **1 GiB** with 2 MiB huge pages, so virtual == physical for everything
   the kernel touches early. (No higher-half mapping yet — a deliberate
   simplification; see [ADR 0001](decisions/0001-multiboot2-long-mode.md).)
-- Dynamic: milestone 5 adds a physical frame allocator over the multiboot
-  memory map and a kernel heap (`kmalloc`) on top.
+- Dynamic: the physical allocator tracks identity-mapped frames below 1 GiB
+  with allocation and ownership bitmaps. A 64 KiB first-fit, coalescing kernel
+  heap (`kmalloc`/`kfree`) is backed by 16 consecutive managed frames.
 
 ## Concurrency model
 

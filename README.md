@@ -67,8 +67,8 @@ QEMU + GDB workflow.
 
 ## Status
 
-Milestone 4 (the interrupt-driven PS/2 keyboard) is **done** — the repo builds
-and boots today with decoded input buffered for the shell. The road
+Milestone 5 (physical memory and the kernel heap) is **done** — the repo builds
+and boots today with self-tested frame and byte allocators. The road
 from here to a working shell is tracked, milestone by milestone, in
 [docs/04-roadmap.md](docs/04-roadmap.md).
 
@@ -79,7 +79,7 @@ from here to a working shell is tracked, milestone by milestone, in
 | 2 | Global Descriptor Table | ✅ done |
 | 3 | Interrupts (IDT + PIC + timer) | ✅ done |
 | 4 | PS/2 keyboard driver | ✅ done |
-| 5 | Physical memory + kernel heap | ⬜ |
+| 5 | Physical memory + kernel heap | ✅ done |
 | 6 | The shell | ⬜ |
 | 7 | Polish, tests, portfolio pass | ⬜ |
 

@@ -1,4 +1,4 @@
-# Milestone 5 — Memory (physical allocator + kernel heap)
+# Milestone 5 — Memory (physical allocator + kernel heap) ✅ (done)
 
 **Goal:** dynamic memory in the kernel — a physical frame allocator over the
 real memory map, and a `kmalloc`/`kfree` heap on top.
@@ -10,18 +10,18 @@ bitmap frame allocation, bump vs free-list heaps, block headers and coalescing.
 
 ## Tasks
 
-- [ ] Save the multiboot2 info pointer at boot (GRUB leaves it in `ebx`; pass it
+- [x] Save the multiboot2 info pointer at boot (GRUB leaves it in `ebx`; pass it
       from `long_mode.asm` into `kernel_main` as an argument, or stash it).
-- [ ] Export an `end` symbol from `linker.ld` so the kernel knows where its
+- [x] Export an `end` symbol from `linker.ld` so the kernel knows where its
       image ends and free RAM can begin.
-- [ ] `src/pmm.c` + `include/pmm.h`: parse the memory map, build a **bitmap**
+- [x] `src/pmm.c` + `include/pmm.h`: parse the memory map, build a **bitmap**
       frame allocator; `pmm_alloc()` / `pmm_free()`; track total/used/free.
-- [ ] `src/heap.c` + `include/heap.h`: `kmalloc`/`kfree`. Ship a **bump**
+- [x] `src/heap.c` + `include/heap.h`: `kmalloc`/`kfree`. Ship a **bump**
       allocator first to unblock the shell, then upgrade to a **free-list** heap
       with coalescing (separate commit).
-- [ ] Expose `mem_stats()` (total/used/free frames + heap usage) for the `mem`
+- [x] Expose `mem_stats()` (total/used/free frames + heap usage) for the `mem`
       command.
-- [ ] Print `[ok] pmm`, `[ok] heap`.
+- [x] Print `[ok] pmm`, `[ok] heap`.
 
 ## Files
 
@@ -31,12 +31,12 @@ multiboot pointer).
 
 ## Definition of Done
 
-- [ ] `pmm_alloc()` returns distinct valid frames; `pmm_free()` reclaims them
+- [x] `pmm_alloc()` returns distinct valid frames; `pmm_free()` reclaims them
       (a self-test at init: alloc N, free, re-alloc, assert reuse).
-- [ ] `kmalloc`/`kfree` work; a free-list stress test (alloc/free mix) doesn't
+- [x] `kmalloc`/`kfree` work; a free-list stress test (alloc/free mix) doesn't
       corrupt the heap.
-- [ ] `mem_stats()` reports plausible numbers.
-- [ ] `make iso` clean, `make run` boots, CI green.
+- [x] `mem_stats()` reports plausible numbers.
+- [x] `make iso` clean, `make run` boots, CI green.
 
 ## References
 

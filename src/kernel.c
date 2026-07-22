@@ -49,7 +49,7 @@ void kernel_main(uintptr_t multiboot_info_address) {
     kprintf("[ok] heap\n");
     if (!heap_self_test())
         init_failure("heap-selftest");
-    kprintf("[ok] heap-bump-selftest\n");
+    kprintf("[ok] heap-selftest\n");
 
     idt_init();
     kprintf("[ok] idt\n");
@@ -74,7 +74,7 @@ void kernel_main(uintptr_t multiboot_info_address) {
             (unsigned int)memory.free_frames,
             (unsigned int)memory.heap_used,
             (unsigned int)memory.heap_capacity);
-    kprintf("Milestone 5 bump allocator online.\n");
+    kprintf("Milestone 5 complete.\n");
 
     for (;;)
         __asm__ volatile ("hlt");

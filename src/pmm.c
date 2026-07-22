@@ -41,6 +41,7 @@ struct multiboot_memory_map_entry {
 extern uint8_t end[];
 
 static uint64_t frame_bitmap[BITMAP_WORD_COUNT];
+static uint64_t allocation_bitmap[BITMAP_WORD_COUNT];
 static uint64_t frame_count;
 static uint64_t used_frame_count;
 
@@ -51,6 +52,21 @@ static uintptr_t align_up(uintptr_t value, uintptr_t alignment) {
 static bool frame_is_used(uint64_t frame) {
     return (frame_bitmap[frame / BITMAP_WORD_BITS]
             & (1ULL << (frame % BITMAP_WORD_BITS))) != 0;
+}
+
+static bool frame_is_allocated(uint64_t frame) {
+    return (allocation_bitmap[frame / BITMAP_WORD_BITS]
+            & (1ULL << (frame % BITMAP_WORD_BITS))) != 0;
+}
+
+static void mark_frame_allocated(uint64_t frame) {
+    allocation_bitmap[frame / BITMAP_WORD_BITS]
+        |= 1ULL << (frame % BITMAP_WORD_BITS);
+}
+
+static void mark_frame_unallocated(uint64_t frame) {
+    allocation_bitmap[frame / BITMAP_WORD_BITS]
+        &= ~(1ULL << (frame % BITMAP_WORD_BITS));
 }
 
 static void mark_frame_used(uint64_t frame) {
@@ -137,6 +153,7 @@ static bool configure_frames(struct multiboot_memory_map_tag *memory_map) {
         return false;
 
     memset(frame_bitmap, 0xFF, sizeof(frame_bitmap));
+    memset(allocation_bitmap, 0, sizeof(allocation_bitmap));
     used_frame_count = frame_count;
 
     for (uintptr_t cursor = entries_start;
@@ -185,6 +202,7 @@ uintptr_t pmm_alloc(void) {
     for (uint64_t frame = 0; frame < frame_count; frame++) {
         if (!frame_is_used(frame)) {
             mark_frame_used(frame);
+            mark_frame_allocated(frame);
             return frame * PMM_PAGE_SIZE;
         }
     }
@@ -193,8 +211,16 @@ uintptr_t pmm_alloc(void) {
 }
 
 void pmm_free(uintptr_t frame) {
-    if (frame % PMM_PAGE_SIZE == 0)
-        mark_frame_free(frame / PMM_PAGE_SIZE);
+    uint64_t frame_number;
+
+    if (frame % PMM_PAGE_SIZE != 0)
+        return;
+    frame_number = frame / PMM_PAGE_SIZE;
+    if (frame_number >= frame_count || !frame_is_allocated(frame_number))
+        return;
+
+    mark_frame_unallocated(frame_number);
+    mark_frame_free(frame_number);
 }
 
 struct pmm_stats pmm_get_stats(void) {
