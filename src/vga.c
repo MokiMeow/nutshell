@@ -48,6 +48,18 @@ static void newline(void) {
 
 void vga_putc(char c) {
     if (c == '\n') { newline(); return; }
+    if (c == '\b') {
+        if (col > 0) {
+            col--;
+        } else if (row > 0) {
+            row--;
+            col = VGA_COLS - 1;
+        } else {
+            return;
+        }
+        vga[row * VGA_COLS + col] = cell(' ', color);
+        return;
+    }
     vga[row * VGA_COLS + col] = cell(c, color);
     if (++col == VGA_COLS)
         newline();

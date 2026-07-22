@@ -16,7 +16,7 @@ matters, not the calendar.
 | 1 | 1 | **I/O** ✅ | `kprintf` (formatted output to VGA + serial) | varargs, number formatting, driver layering |
 | 1 | 2 | **GDT** ✅ | a proper 64-bit GDT (+ TSS stub) in C | segmentation, descriptors, `lgdt` |
 | 2–3 | 3 | **Interrupts** ✅ | IDT, remap the 8259 PIC, exceptions, IRQs, PIT timer | interrupt vectors, IRQ handling, EOI |
-| 4 | 4 | **Keyboard** | PS/2 IRQ1 driver, scancode decode, input ring buffer | device I/O, scancode set 1, buffering |
+| 4 | 4 | **Keyboard** ✅ | PS/2 IRQ1 driver, scancode decode, input ring buffer | device I/O, scancode set 1, buffering |
 | 5 | 5 | **Memory** | physical frame allocator + kernel heap (`kmalloc`) | the multiboot memory map, allocators |
 | 6 | 6 | **Shell** | REPL + built-ins | parsing, command dispatch, putting it together |
 | 7 | 7 | **Polish** | tests, CI, README GIF, tag `v1.0.0` | QEMU test harness, presentation |

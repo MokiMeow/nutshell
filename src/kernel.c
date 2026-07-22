@@ -8,6 +8,7 @@
 #include "gdt.h"
 #include "idt.h"
 #include "kprintf.h"
+#include "keyboard.h"
 #include "pic.h"
 #include "serial.h"
 #include "timer.h"
@@ -31,6 +32,8 @@ void kernel_main(void) {
     kprintf("[ok] pic\n");
     timer_init();
     kprintf("[ok] timer\n");
+    keyboard_init();
+    kprintf("[ok] keyboard\n");
     __asm__ volatile ("sti");
     while (timer_ticks() < TIMER_FREQUENCY_HZ)
         __asm__ volatile ("hlt");
@@ -39,8 +42,8 @@ void kernel_main(void) {
     vga_set_color(VGA_LIGHT_GREEN, VGA_BLACK);
     kprintf("%s", BANNER);
     vga_set_color(VGA_LIGHT_GREY, VGA_BLACK);
-    kprintf("Milestone 3 complete.\n");
+    kprintf("Milestone 4 complete. Keyboard echo test:\n");
 
     for (;;)
-        __asm__ volatile ("hlt");
+        kprintf("%c", keyboard_getchar());
 }

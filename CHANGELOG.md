@@ -7,6 +7,8 @@ to follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ## [Unreleased]
 
 ### Added
+- Milestone 4: an IRQ1 PS/2 keyboard driver with scancode-set-1 decoding,
+  Shift handling, and a fixed-size input ring buffer.
 - Milestone 3: a 256-entry IDT, uniform exception/IRQ assembly stubs, fault
   reports, remapped 8259 PIC handling, and a 100 Hz PIT tick counter.
 - Milestone 2: a runtime 64-bit GDT, kernel code/data descriptors, and a loaded
