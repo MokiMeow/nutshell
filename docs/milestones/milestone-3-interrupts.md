@@ -1,4 +1,4 @@
-# Milestone 3 — Interrupts (IDT + PIC + PIT)
+# Milestone 3 — Interrupts (IDT + PIC + PIT) ✅ (done)
 
 **Goal:** turn hardware and CPU events into C handler calls. This unlocks the
 keyboard (M4) and gives clean fault reports instead of silent reboots.
@@ -11,21 +11,21 @@ the End-Of-Interrupt signal, the PIT.
 
 ## Tasks
 
-- [ ] Add `include/io.h` with `inb`/`outb` (and `io_wait`).
-- [ ] `boot/isr_stubs.asm`: macro-generate stubs for vectors 0–47; each pushes a
+- [x] Add `include/io.h` with `inb`/`outb` (and `io_wait`).
+- [x] `boot/isr_stubs.asm`: macro-generate stubs for vectors 0–47; each pushes a
       uniform frame (vector + error code) and jumps to a common trampoline that
       calls `isr_handler` / `irq_handler`.
-- [ ] `src/idt.c` + `include/idt.h`: build 256 gate descriptors, install the
+- [x] `src/idt.c` + `include/idt.h`: build 256 gate descriptors, install the
       stubs for 0–47, `lidt`.
-- [ ] `src/isr.c`: exception handler that prints vector, error code, and key
+- [x] `src/isr.c`: exception handler that prints vector, error code, and key
       registers via `kprintf`, then halts (for now). Install a double-fault
       handler using the IST stack from M2.
-- [ ] `src/pic.c`: remap master/slave PIC to vectors 32–47; mask all IRQs
+- [x] `src/pic.c`: remap master/slave PIC to vectors 32–47; mask all IRQs
       initially; helpers to unmask a line and send EOI.
-- [ ] `src/timer.c`: program the PIT to ~100 Hz on IRQ0; ISR increments a global
+- [x] `src/timer.c`: program the PIT to ~100 Hz on IRQ0; ISR increments a global
       tick counter; expose `timer_ticks()`.
-- [ ] Register the IRQ handlers, unmask IRQ0, and `sti` in `kernel_main`.
-- [ ] Print `[ok] idt`, `[ok] pic`, `[ok] timer`.
+- [x] Register the IRQ handlers, unmask IRQ0, and `sti` in `kernel_main`.
+- [x] Print `[ok] idt`, `[ok] pic`, `[ok] timer`.
 
 ## Files
 
@@ -35,11 +35,11 @@ edit `src/kernel.c`.
 
 ## Definition of Done
 
-- [ ] After `sti`, the kernel keeps running (no triple fault) and the tick
+- [x] After `sti`, the kernel keeps running (no triple fault) and the tick
       counter increases over time (log it, or busy-print every N ticks).
-- [ ] Deliberately dividing by zero (temporary test) prints a fault report
+- [x] Deliberately dividing by zero (temporary test) prints a fault report
       instead of rebooting.
-- [ ] `make iso` clean, `make run` boots, CI green.
+- [x] `make iso` clean, `make run` boots, CI green.
 
 ## References
 

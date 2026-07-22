@@ -27,8 +27,10 @@ load it with `lidt`. Vectors split into:
 Each vector needs a tiny assembly stub (`boot/isr_stubs.asm`) because the CPU
 pushes different frames for exceptions with vs without an error code. Each stub
 pushes a uniform frame (vector number, dummy error code where needed) and jumps
-to a common handler that calls into C (`src/isr.c`). Macros generate the 48
-stubs.
+to a common handler that saves every general-purpose register, aligns the
+stack, and calls into C (`src/isr.c`). Macros generate the 48 stubs. Vector 8
+uses the TSS's dedicated IST1 stack so a damaged normal stack cannot prevent a
+double-fault report.
 
 ## Remapping the 8259 PIC
 
@@ -46,7 +48,8 @@ Key IRQs we care about:
 
 The Programmable Interval Timer fires IRQ0 at a rate we set (e.g. 100 Hz). We
 count ticks; `uptime` in the shell reports them. It's also the first proof the
-whole interrupt path works end to end.
+whole interrupt path works end to end. During boot, the kernel sleeps until
+100 ticks have arrived and then prints `[ok] timer-tick` synchronously.
 
 ## Sequence, once wired up
 

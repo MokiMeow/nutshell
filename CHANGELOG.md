@@ -7,6 +7,8 @@ to follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ## [Unreleased]
 
 ### Added
+- Milestone 3: a 256-entry IDT, uniform exception/IRQ assembly stubs, fault
+  reports, remapped 8259 PIC handling, and a 100 Hz PIT tick counter.
 - Milestone 2: a runtime 64-bit GDT, kernel code/data descriptors, and a loaded
   TSS with dedicated ring-0 and double-fault stacks.
 - Milestone 1: freestanding memory and string helpers, integer formatting, and
