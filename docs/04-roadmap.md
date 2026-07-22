@@ -13,7 +13,7 @@ matters, not the calendar.
 | Day | # | Milestone | You'll build | You'll learn |
 |-----|---|-----------|--------------|--------------|
 | — | 0 | **Boot** ✅ | multiboot2, 32→64-bit, paging, VGA+serial banner | protected vs long mode, page tables, GDT |
-| 1 | 1 | **I/O** | `kprintf` (formatted output to VGA + serial) | varargs, number formatting, driver layering |
+| 1 | 1 | **I/O** ✅ | `kprintf` (formatted output to VGA + serial) | varargs, number formatting, driver layering |
 | 1 | 2 | **GDT** | a proper 64-bit GDT (+ TSS stub) in C | segmentation, descriptors, `lgdt` |
 | 2–3 | 3 | **Interrupts** | IDT, remap the 8259 PIC, exceptions, IRQs, PIT timer | interrupt vectors, IRQ handling, EOI |
 | 4 | 4 | **Keyboard** | PS/2 IRQ1 driver, scancode decode, input ring buffer | device I/O, scancode set 1, buffering |

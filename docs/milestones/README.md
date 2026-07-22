@@ -7,7 +7,7 @@ dependency graph). Do exactly one per pass; keep the build green.
 | # | Milestone | State |
 |---|-----------|-------|
 | 0 | [Boot](milestone-0-boot.md) | ✅ done |
-| 1 | [I/O — `kprintf`](milestone-1-io.md) | ⬜ |
+| 1 | [I/O — `kprintf`](milestone-1-io.md) | ✅ done |
 | 2 | [GDT](milestone-2-gdt.md) | ⬜ |
 | 3 | [Interrupts (IDT + PIC + PIT)](milestone-3-interrupts.md) | ⬜ |
 | 4 | [Keyboard](milestone-4-keyboard.md) | ⬜ |

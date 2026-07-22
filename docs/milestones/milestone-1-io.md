@@ -1,4 +1,4 @@
-# Milestone 1 — I/O (`kprintf`)
+# Milestone 1 — I/O (`kprintf`) ✅ (done)
 
 **Goal:** formatted kernel output to both VGA and serial, so every later
 milestone is debuggable.
@@ -10,15 +10,15 @@ conversion in multiple bases, layering a formatter over raw device drivers.
 
 ## Tasks
 
-- [ ] Add `src/string.c` + `include/string.h` with `memset`, `memcpy`,
+- [x] Add `src/string.c` + `include/string.h` with `memset`, `memcpy`,
       `strlen`, and integer→string helpers (`itoa`/`utoa` for base 10 and 16).
-- [ ] Add `src/kprintf.c` + `include/kprintf.h` implementing `kprintf(fmt, ...)`
+- [x] Add `src/kprintf.c` + `include/kprintf.h` implementing `kprintf(fmt, ...)`
       supporting at least: `%c %s %d %u %x %p %%`. Width/padding optional.
-- [ ] Route `kprintf` output to **both** VGA (`vga_putc`) and serial
+- [x] Route `kprintf` output to **both** VGA (`vga_putc`) and serial
       (`serial_putc`) via a small `kputc` sink.
-- [ ] Replace the raw `vga_puts`/`serial_puts` calls in `kernel.c` with
+- [x] Replace the raw `vga_puts`/`serial_puts` calls in `kernel.c` with
       `kprintf`.
-- [ ] Print an init line per subsystem as they come online, e.g. `[ok] serial`.
+- [x] Print an init line per subsystem as they come online, e.g. `[ok] serial`.
 
 ## Files
 
@@ -27,11 +27,11 @@ edit `src/kernel.c`.
 
 ## Definition of Done
 
-- [ ] `kprintf("%s %d 0x%x\n", "n=", 42, 0xBEEF)` prints correctly on screen
+- [x] `kprintf("%s %d 0x%x\n", "n=", 42, 0xBEEF)` prints correctly on screen
       and serial.
-- [ ] `make iso` clean; `make run` still boots to the banner (now via
+- [x] `make iso` clean; `make run` still boots to the banner (now via
       `kprintf`).
-- [ ] Serial still contains `Nutshell` (CI stays green).
+- [x] Serial still contains `Nutshell` (CI stays green).
 
 ## References
 

@@ -7,6 +7,8 @@ to follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ## [Unreleased]
 
 ### Added
+- Milestone 1: freestanding memory and string helpers, integer formatting, and
+  `kprintf` output mirrored to VGA text mode and COM1 serial.
 - Milestone 0: bootable skeleton — multiboot2 header, 32→64-bit long-mode
   bring-up (paging, PAE, EFER.LME, 64-bit GDT), minimal VGA text driver and
   COM1 serial driver, and a `kernel_main` banner.
