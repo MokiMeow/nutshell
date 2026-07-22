@@ -21,7 +21,7 @@
 #include "vga.h"
 
 static const char *BANNER =
-    "Nutshell v0.1.0 - booted into 64-bit long mode.\n";
+    "Nutshell v1.0.0 - booted into 64-bit long mode.\n";
 
 static void init_failure(const char *subsystem) {
     kprintf("[FAIL] %s\n", subsystem);

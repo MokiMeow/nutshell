@@ -32,8 +32,17 @@ into `build/kernel.bin`, wraps that in a GRUB ISO (`build/nutshell.iso`), and
 boots it in QEMU. A window opens and you should see:
 
 ```
-Nutshell v0.1.0 - booted into 64-bit long mode.
-Milestone 0 complete. Next: docs/milestones/milestone-1-io.md
+[ok] gdt
+[ok] pmm-selftest
+[ok] heap-selftest
+[ok] idt
+[ok] pic
+[ok] timer
+[ok] keyboard
+Nutshell v1.0.0 - booted into 64-bit long mode.
+[ok] shell
+Milestone 6 complete.
+nutshell>
 ```
 
 The same banner is printed to the serial port, which `make run` wires to your
@@ -47,12 +56,13 @@ terminal, so you'll see it there too.
 | `make iso` | Build the bootable ISO. |
 | `make run` | Build + boot in QEMU. |
 | `make debug` | Boot halted, GDB stub on `:1234`. |
+| `make test` | Build the test ISO and run in-kernel tests headlessly. |
 | `make clean` | Delete `build/`. |
 
 ## 4. Capturing the boot GIF (for the README)
 
-The boot-to-shell GIF is the project's headline artifact. Record the QEMU
-window:
+The checked-in `assets/boot-to-shell.gif` is the project's headline artifact.
+To record a replacement from a visible QEMU window:
 
 - **Linux**: [`peek`](https://github.com/phw/peek) or
   `ffmpeg -f x11grab ...` over the QEMU window.

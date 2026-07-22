@@ -6,7 +6,11 @@ to follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [1.0.0] — 2026-07-23
+
 ### Added
+- Milestone 7: a separate isa-debug-exit kernel test image, full serial-marker
+  CI assertions, scripted shell coverage, and real QEMU GIF/screenshot proof.
 - Milestone 6: an interactive `nutshell> ` REPL with line editing, tokenized
   command dispatch, and `help`, `echo`, `clear`, `mem`, `uptime`, `reboot`, and
   `panic` built-ins.

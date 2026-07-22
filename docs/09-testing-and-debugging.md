@@ -62,6 +62,12 @@ a line like `[ok] idt`, and CI can assert they all appear. A QEMU **isa-debug-ex
 device (port `0xF4`) lets a kernel test build exit QEMU with a chosen code — the
 basis for pass/fail kernel tests if you want them in milestone 7.
 
+Milestone 7 implements that path. `make test` builds a separate
+`build/nutshell-test.iso`, repeats the PMM and heap tests, dispatches a scripted
+shell command, and writes guest status zero to `0xF4`. QEMU encodes that as
+host status one; `tests/run-selftest.sh` validates and translates it to a
+normal successful exit code for CI.
+
 ## Common failure modes
 
 | Symptom | Likely cause |

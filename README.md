@@ -9,7 +9,12 @@
   <img src="https://img.shields.io/badge/arch-x86__64-blue" alt="x86_64">
   <img src="https://img.shields.io/badge/lang-C%20%2B%20Assembly-orange" alt="C + Assembly">
   <img src="https://img.shields.io/badge/boot-Multiboot2%20%2F%20GRUB-green" alt="Multiboot2">
+  <img src="https://img.shields.io/badge/release-v1.0.0-brightgreen" alt="v1.0.0">
   <img src="https://img.shields.io/badge/license-MIT-lightgrey" alt="MIT">
+</p>
+
+<p align="center">
+  <img src="assets/boot-to-shell.gif" alt="Nutshell booting and running shell commands">
 </p>
 
 ---
@@ -25,6 +30,14 @@ this **is** the OS.
 
 It is deliberately scoped: enough to be real, small enough for one person to
 understand end to end.
+
+## How it boots
+
+GRUB loads the Multiboot2 image, the 32-bit entry creates the first page
+tables and enables long mode, and a far jump hands control to the 64-bit C
+kernel. The kernel then brings up its runtime GDT/TSS, allocators, interrupts,
+timer, and keyboard before entering the shell. The complete annotated path is
+in [docs/03-boot-process.md](docs/03-boot-process.md).
 
 ```
 +-----------+   GRUB    +------------------+  long mode  +----------------+
@@ -52,11 +65,19 @@ understand end to end.
 - **A shell on bare metal** — a REPL with built-in commands, running with
   nothing beneath it. ([docs/08-the-shell.md](docs/08-the-shell.md))
 
+## Fault diagnostics
+
+The `panic` built-in deliberately raises a divide error so the exception path
+can report the vector and register state instead of silently rebooting.
+
+![Nutshell exception report](assets/panic.png)
+
 ## Quick start (WSL2 / Linux, $0, no accounts)
 
 ```bash
 ./scripts/setup-wsl.sh   # one-time: nasm, gcc, binutils, grub, qemu
 make run                 # build the ISO and boot Nutshell in QEMU
+make test                # run PMM, heap, and scripted-shell tests in QEMU
 ```
 
 You should see Nutshell boot into 64-bit long mode and print its banner.
@@ -67,10 +88,8 @@ QEMU + GDB workflow.
 
 ## Status
 
-Milestone 6 (the interactive shell) is **done** — the repo boots to
-`nutshell> ` with all built-in commands working. The final portfolio pass
-is tracked as milestone 7 in
-[docs/04-roadmap.md](docs/04-roadmap.md).
+Nutshell **v1.0.0 is complete**. The kernel boots to `nutshell> `, all built-in
+commands work, and CI smoke-boots both the interactive and self-test images.
 
 | # | Milestone | State |
 |---|-----------|-------|
@@ -81,7 +100,7 @@ is tracked as milestone 7 in
 | 4 | PS/2 keyboard driver | ✅ done |
 | 5 | Physical memory + kernel heap | ✅ done |
 | 6 | The shell | ✅ done |
-| 7 | Polish, tests, portfolio pass | ⬜ |
+| 7 | Polish, tests, portfolio pass | ✅ done |
 
 ## Repository layout
 
@@ -90,8 +109,10 @@ nutshell/
 ├── boot/         # assembly: multiboot header, 32->64-bit bring-up
 ├── src/          # C kernel sources (auto-discovered by the Makefile)
 ├── include/      # kernel headers
+├── assets/       # real QEMU boot GIF and fault screenshot
 ├── grub/         # GRUB config baked into the ISO
 ├── scripts/      # toolchain setup and helpers
+├── tests/        # headless QEMU self-test runner
 ├── docs/         # architecture, boot process, roadmap, milestones, ADRs
 ├── linker.ld     # places the multiboot header first; loads kernel at 1 MiB
 └── Makefile      # build / iso / run / debug / clean

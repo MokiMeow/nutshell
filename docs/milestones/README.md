@@ -13,7 +13,7 @@ dependency graph). Do exactly one per pass; keep the build green.
 | 4 | [Keyboard](milestone-4-keyboard.md) | ✅ done |
 | 5 | [Memory (PMM + heap)](milestone-5-memory.md) | ✅ done |
 | 6 | [The shell](milestone-6-shell.md) | ✅ done |
-| 7 | [Polish](milestone-7-polish.md) | ⬜ |
+| 7 | [Polish](milestone-7-polish.md) | ✅ done |
 
 ## Every milestone spec has
 

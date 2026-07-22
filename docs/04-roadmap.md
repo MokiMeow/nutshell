@@ -1,6 +1,6 @@
 # 04 — Roadmap
 
-The path from "boots to a banner" (today) to "boots into a working shell." Each
+The completed path from "boots to a banner" to "boots into a working shell." Each
 milestone is a self-contained step that leaves a bootable kernel behind, with a
 full spec and a Definition of Done in [milestones/](milestones/).
 
@@ -19,7 +19,7 @@ matters, not the calendar.
 | 4 | 4 | **Keyboard** ✅ | PS/2 IRQ1 driver, scancode decode, input ring buffer | device I/O, scancode set 1, buffering |
 | 5 | 5 | **Memory** ✅ | physical frame allocator + kernel heap (`kmalloc`) | the multiboot memory map, allocators |
 | 6 | 6 | **Shell** ✅ | REPL + built-ins | parsing, command dispatch, putting it together |
-| 7 | 7 | **Polish** | tests, CI, README GIF, tag `v1.0.0` | QEMU test harness, presentation |
+| 7 | 7 | **Polish** ✅ | tests, CI, README GIF, tag `v1.0.0` | QEMU test harness, presentation |
 
 ## Dependency order
 
