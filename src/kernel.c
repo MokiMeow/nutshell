@@ -13,6 +13,9 @@
 #include "pic.h"
 #include "pmm.h"
 #include "serial.h"
+#ifdef KERNEL_TEST
+#include "selftest.h"
+#endif
 #include "shell.h"
 #include "timer.h"
 #include "vga.h"
@@ -68,5 +71,8 @@ void kernel_main(uintptr_t multiboot_info_address) {
     vga_set_color(VGA_LIGHT_GREY, VGA_BLACK);
     kprintf("[ok] shell\n");
     kprintf("Milestone 6 complete.\n");
+#ifdef KERNEL_TEST
+    kernel_self_test();
+#endif
     shell_run();
 }

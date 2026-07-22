@@ -25,14 +25,21 @@ BUILD   := build
 ISO_DIR := $(BUILD)/isofiles
 KERNEL  := $(BUILD)/kernel.bin
 ISO     := $(BUILD)/nutshell.iso
+TEST_BUILD   := $(BUILD)/test
+TEST_ISO_DIR := $(TEST_BUILD)/isofiles
+TEST_KERNEL  := $(TEST_BUILD)/kernel.bin
+TEST_ISO     := $(BUILD)/nutshell-test.iso
 
 ASM_SRC := $(wildcard boot/*.asm)
 C_SRC   := $(wildcard src/*.c)
 ASM_OBJ := $(patsubst boot/%.asm,$(BUILD)/%.o,$(ASM_SRC))
 C_OBJ   := $(patsubst src/%.c,$(BUILD)/%.o,$(C_SRC))
 OBJ     := $(ASM_OBJ) $(C_OBJ)
+TEST_ASM_OBJ := $(patsubst boot/%.asm,$(TEST_BUILD)/%.o,$(ASM_SRC))
+TEST_C_OBJ   := $(patsubst src/%.c,$(TEST_BUILD)/%.o,$(C_SRC))
+TEST_OBJ     := $(TEST_ASM_OBJ) $(TEST_C_OBJ)
 
-.PHONY: all iso run debug clean
+.PHONY: all iso test-iso test run debug clean
 
 all: $(KERNEL)
 
@@ -48,6 +55,18 @@ $(KERNEL): $(OBJ) linker.ld
 $(BUILD):
 	mkdir -p $(BUILD)
 
+$(TEST_BUILD)/%.o: boot/%.asm | $(TEST_BUILD)
+	$(NASM) -f elf64 $< -o $@
+
+$(TEST_BUILD)/%.o: src/%.c | $(TEST_BUILD)
+	$(CC) $(CFLAGS) -DKERNEL_TEST $< -o $@
+
+$(TEST_KERNEL): $(TEST_OBJ) linker.ld
+	$(LD) $(LDFLAGS) -o $@ $(TEST_OBJ)
+
+$(TEST_BUILD):
+	mkdir -p $(TEST_BUILD)
+
 iso: $(ISO)
 
 $(ISO): $(KERNEL) grub/grub.cfg
@@ -55,6 +74,17 @@ $(ISO): $(KERNEL) grub/grub.cfg
 	cp $(KERNEL) $(ISO_DIR)/boot/kernel.bin
 	cp grub/grub.cfg $(ISO_DIR)/boot/grub/grub.cfg
 	$(GRUB_MKRESCUE) -o $(ISO) $(ISO_DIR) 2>/dev/null
+
+test-iso: $(TEST_ISO)
+
+$(TEST_ISO): $(TEST_KERNEL) grub/grub.cfg
+	mkdir -p $(TEST_ISO_DIR)/boot/grub
+	cp $(TEST_KERNEL) $(TEST_ISO_DIR)/boot/kernel.bin
+	cp grub/grub.cfg $(TEST_ISO_DIR)/boot/grub/grub.cfg
+	$(GRUB_MKRESCUE) -o $(TEST_ISO) $(TEST_ISO_DIR) 2>/dev/null
+
+test: $(TEST_ISO)
+	bash tests/run-selftest.sh $(TEST_ISO)
 
 # Boot the kernel. Serial output is mirrored to your terminal.
 run: $(ISO)

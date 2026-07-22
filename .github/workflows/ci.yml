@@ -19,7 +19,7 @@ jobs:
             xorriso grub-pc-bin grub-common mtools qemu-system-x86
 
       - name: Build ISO
-        run: make iso
+        run: make clean && make iso
 
       - name: Smoke-boot in QEMU and check serial output
         run: |
@@ -30,4 +30,24 @@ jobs:
             -no-reboot || true
           echo "----- serial.log -----"
           cat serial.log || true
-          grep -q "Nutshell" serial.log
+          for marker in \
+            "[ok] gdt" \
+            "[ok] serial" \
+            "[ok] vga" \
+            "[ok] pmm" \
+            "[ok] pmm-selftest" \
+            "[ok] heap" \
+            "[ok] heap-selftest" \
+            "[ok] idt" \
+            "[ok] pic" \
+            "[ok] timer" \
+            "[ok] keyboard" \
+            "[ok] timer-tick" \
+            "[ok] shell" \
+            "Nutshell" \
+            "nutshell> "; do
+            grep -Fq "$marker" serial.log
+          done
+
+      - name: Run in-kernel self-tests
+        run: make test
