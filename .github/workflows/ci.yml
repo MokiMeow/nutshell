@@ -23,7 +23,7 @@ jobs:
 
       - name: Smoke-boot in QEMU and check serial output
         run: |
-          timeout 20 qemu-system-x86_64 \
+          timeout 60 qemu-system-x86_64 \
             -cdrom build/nutshell.iso \
             -display none \
             -serial file:serial.log \

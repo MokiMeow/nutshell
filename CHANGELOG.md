@@ -6,6 +6,12 @@ to follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Fixed
+- Self-test harness: raised the QEMU timeout from 25s to 60s (and the CI
+  smoke-boot from 20s to 60s) so slow cold/emulated runners without KVM are not
+  mistaken for failures, and reported an infrastructure timeout (exit 2)
+  separately from a guest test failure (exit 1).
+
 ## [1.0.0] — 2026-07-23
 
 ### Added
