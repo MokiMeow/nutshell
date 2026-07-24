@@ -12,3 +12,6 @@ build/
 *.swp
 .DS_Store
 Thumbs.db
+
+# Local build-agent scaffolding, not part of the project
+PROMPTS.md
