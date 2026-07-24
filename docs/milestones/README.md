@@ -24,7 +24,7 @@ dependency graph). Do exactly one per pass; keep the build green.
 - **Definition of Done** — the objective bar; don't tick it without booting.
 - **References** — the canonical sources.
 
-## The Builder's loop (from AGENTS.md)
+## The loop (from AGENTS.md)
 
 1. Pick the lowest-numbered unfinished milestone.
 2. Implement its tasks, keeping `make iso` clean and `make run` booting.

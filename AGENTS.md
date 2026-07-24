@@ -1,7 +1,7 @@
-# AGENTS.md — operating manual for coding agents
+# AGENTS.md — how this repo is built
 
-This file is the source of truth for any AI agent (or human) working on
-Nutshell. Read it fully before making changes. It defines the roles, the
+The working agreement for this repository: anyone contributing to Nutshell should
+read it fully before making changes. It defines the roles, the
 rules, the build/verify commands, and the exact milestone-by-milestone path
 from "boots to a banner" to "boots into a working shell."
 
@@ -10,18 +10,18 @@ If anything here conflicts with a code comment or a stray note elsewhere,
 
 ---
 
-## 1. Roles
+## 1. How the work is organised
 
 Nutshell is built with a two-role workflow:
 
-- **Orchestrator** — plans the work, defines each milestone and its Definition
+- **Planning** — plans the work, defines each milestone and its Definition
   of Done, reviews diffs, and keeps the docs and roadmap honest. The
   orchestrator does *not* dump large implementations; it decides *what* and
   *in what order*, and checks the result.
-- **Builder** — the agent that implements one milestone at a time against the
+- **Implementation** — work proceeds one milestone at a time against the
   spec in `docs/milestones/`, keeping the build green at every step.
 
-If you are the Builder, your loop is: **pick the lowest-numbered unfinished
+The loop is: **pick the lowest-numbered unfinished
 milestone → implement it → make the build and boot pass → tick its Definition
 of Done → update the roadmap and CHANGELOG → stop for review.** Do exactly one
 milestone per pass. Do not jump ahead.
