@@ -1,4 +1,4 @@
-# Milestone 4 — Keyboard ✅ (done)
+# Milestone 4: Keyboard ✅ (done)
 
 **Goal:** an interrupt-driven PS/2 keyboard driver that turns key presses into
 characters in a ring buffer the shell can read.
@@ -35,7 +35,7 @@ edit `src/kernel.c` and the IRQ registration from M3.
 
 ## References
 
-- OSDev Wiki — [PS/2 Keyboard](https://wiki.osdev.org/PS/2_Keyboard)
-- OSDev Wiki — [PS/2 Controller](https://wiki.osdev.org/%228042%22_PS/2_Controller)
+- OSDev Wiki: [PS/2 Keyboard](https://wiki.osdev.org/PS/2_Keyboard)
+- OSDev Wiki: [PS/2 Controller](https://wiki.osdev.org/%228042%22_PS/2_Controller)
 
-**Next:** [Milestone 5 — Memory](milestone-5-memory.md).
+**Next:** [Milestone 5: Memory](milestone-5-memory.md).

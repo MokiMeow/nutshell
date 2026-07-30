@@ -1,11 +1,11 @@
-# 00 — Overview
+# 00: Overview
 
 ## What Nutshell is
 
 Nutshell is a 64-bit x86 operating-system kernel written from scratch in C and
 assembly. It boots on a bare machine (via GRUB), brings the CPU up into 64-bit
 long mode itself, installs its own interrupt handling, drives the keyboard,
-manages physical memory, and boots into an interactive shell — with no
+manages physical memory, and boots into an interactive shell: with no
 operating system beneath it, because it *is* the operating system.
 
 ## Design goals
@@ -13,7 +13,7 @@ operating system beneath it, because it *is* the operating system.
 1. **Understandable end to end.** One person should be able to read every line
    and know why it exists. Clarity beats cleverness.
 2. **From scratch, but not reinventing the boot chain.** We use GRUB as the
-   bootloader (via the multiboot2 standard) so we can focus on the *kernel* —
+   bootloader (via the multiboot2 standard) so we can focus on the *kernel*;
    the CPU bring-up, interrupts, memory, drivers, and shell are all ours.
 3. **Always bootable.** Every commit builds and boots. The project grows by
    milestones, each of which leaves a working kernel behind.
@@ -25,7 +25,7 @@ operating system beneath it, because it *is* the operating system.
 - Not a full OS: no user space, no processes, no networking, no persistent
   filesystem (a tiny in-memory one is a stretch goal, not a requirement).
 - Not POSIX. The shell is a small custom REPL, not bash.
-- Not a bootloader project — GRUB handles the firmware handshake.
+- Not a bootloader project: GRUB handles the firmware handshake.
 
 ## Scope, in one sentence
 

@@ -1,4 +1,4 @@
-# 06 — Interrupts
+# 06: Interrupts
 
 *Implemented in milestone 3.* Concept reference; build steps in
 [milestones/milestone-3-interrupts.md](milestones/milestone-3-interrupts.md).
@@ -18,7 +18,7 @@ load it with `lidt`. Vectors split into:
 
 - **0–31**: CPU **exceptions** (divide-by-zero, page fault, GPF, double
   fault, …). We install handlers that at minimum print the vector + error code
-  and halt — invaluable for debugging.
+  and halt: invaluable for debugging.
 - **32–47**: hardware **IRQs**, after we remap the PIC (see below).
 - the rest: unused for now.
 
@@ -41,8 +41,8 @@ handling an IRQ we must send an **End Of Interrupt (EOI)** or that line never
 fires again.
 
 Key IRQs we care about:
-- **IRQ0** — PIT timer.
-- **IRQ1** — PS/2 keyboard (milestone 4).
+- **IRQ0**: PIT timer.
+- **IRQ1**: PS/2 keyboard (milestone 4).
 
 ## The PIT timer
 
@@ -69,6 +69,6 @@ device raises IRQ ─► PIC ─► CPU ─► IDT[vector] ─► asm stub ─�
 
 ## References
 
-- OSDev Wiki — [Interrupt Descriptor Table](https://wiki.osdev.org/Interrupt_Descriptor_Table)
-- OSDev Wiki — [8259 PIC](https://wiki.osdev.org/8259_PIC)
-- OSDev Wiki — [Programmable Interval Timer](https://wiki.osdev.org/Programmable_Interval_Timer)
+- OSDev Wiki: [Interrupt Descriptor Table](https://wiki.osdev.org/Interrupt_Descriptor_Table)
+- OSDev Wiki: [8259 PIC](https://wiki.osdev.org/8259_PIC)
+- OSDev Wiki: [Programmable Interval Timer](https://wiki.osdev.org/Programmable_Interval_Timer)

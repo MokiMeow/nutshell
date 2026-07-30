@@ -1,4 +1,4 @@
-# Milestone 2 — Global Descriptor Table ✅ (done)
+# Milestone 2: Global Descriptor Table ✅ (done)
 
 **Goal:** replace the throwaway boot GDT with a proper 64-bit GDT set up in C,
 including a TSS, so the IDT (milestone 3) has a stable code selector to target.
@@ -14,7 +14,7 @@ Segment and why long mode still needs one (interrupt stack pointers).
 - [x] Add `src/gdt.c` + `include/gdt.h` that builds a GDT with: null, 64-bit
       kernel code, kernel data, and a TSS descriptor.
 - [x] Fill and load a `struct tss` (at least `rsp0` and an IST entry for a
-      double-fault stack — the double-fault handler in M3 will use it).
+      double-fault stack: the double-fault handler in M3 will use it).
 - [x] Load the GDT with `lgdt` and reload segment registers; `ltr` to load the
       task register.
 - [x] Call `gdt_init()` first thing in `kernel_main`; print `[ok] gdt`.
@@ -31,8 +31,8 @@ Segment and why long mode still needs one (interrupt stack pointers).
 
 ## References
 
-- OSDev Wiki — [Global Descriptor Table](https://wiki.osdev.org/Global_Descriptor_Table)
-- OSDev Wiki — [GDT Tutorial](https://wiki.osdev.org/GDT_Tutorial)
-- OSDev Wiki — [Task State Segment](https://wiki.osdev.org/Task_State_Segment)
+- OSDev Wiki: [Global Descriptor Table](https://wiki.osdev.org/Global_Descriptor_Table)
+- OSDev Wiki: [GDT Tutorial](https://wiki.osdev.org/GDT_Tutorial)
+- OSDev Wiki: [Task State Segment](https://wiki.osdev.org/Task_State_Segment)
 
-**Next:** [Milestone 3 — Interrupts](milestone-3-interrupts.md).
+**Next:** [Milestone 3: Interrupts](milestone-3-interrupts.md).

@@ -1,4 +1,4 @@
-# Milestone 0 — Boot ✅ (done)
+# Milestone 0: Boot ✅ (done)
 
 **Goal:** boot on a bare x86-64 machine, reach 64-bit long mode, and print a
 banner to screen and serial.
@@ -28,8 +28,8 @@ the far jump that switches to 64-bit, VGA text mode, COM1 serial.
 
 ## References
 
-- OSDev Wiki — [Setting Up Long Mode](https://wiki.osdev.org/Setting_Up_Long_Mode)
-- Philipp Oppermann — [A minimal x86 kernel](https://os.phil-opp.com/multiboot-kernel/),
+- OSDev Wiki: [Setting Up Long Mode](https://wiki.osdev.org/Setting_Up_Long_Mode)
+- Philipp Oppermann: [A minimal x86 kernel](https://os.phil-opp.com/multiboot-kernel/),
   [Entering Long Mode](https://os.phil-opp.com/entering-longmode/)
 
-**Next:** [Milestone 1 — I/O](milestone-1-io.md).
+**Next:** [Milestone 1: I/O](milestone-1-io.md).

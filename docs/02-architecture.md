@@ -1,4 +1,4 @@
-# 02 — Architecture
+# 02: Architecture
 
 Nutshell is a single-address-space, single-privilege-level (ring 0) kernel.
 There is no user space yet: the shell runs in the same space as the rest of the
@@ -41,7 +41,7 @@ Lower layers never call up; upper layers depend only on the layers beneath.
 
 - Physical: GRUB loads the kernel at **1 MiB**. Boot code identity-maps the
   first **1 GiB** with 2 MiB huge pages, so virtual == physical for everything
-  the kernel touches early. (No higher-half mapping yet — a deliberate
+  the kernel touches early. (No higher-half mapping yet: a deliberate
   simplification; see [ADR 0001](decisions/0001-multiboot2-long-mode.md).)
 - Dynamic: the physical allocator tracks identity-mapped frames below 1 GiB
   with allocation and ownership bitmaps. A 64 KiB first-fit, coalescing kernel

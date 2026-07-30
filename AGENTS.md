@@ -1,4 +1,4 @@
-# AGENTS.md — how this repo is built
+# AGENTS.md: how this repo is built
 
 The working agreement for this repository: anyone contributing to Nutshell should
 read it fully before making changes. It defines the roles, the
@@ -14,11 +14,11 @@ If anything here conflicts with a code comment or a stray note elsewhere,
 
 Nutshell is built with a two-role workflow:
 
-- **Planning** — plans the work, defines each milestone and its Definition
+- **Planning**: plans the work, defines each milestone and its Definition
   of Done, reviews diffs, and keeps the docs and roadmap honest. The
   orchestrator does *not* dump large implementations; it decides *what* and
   *in what order*, and checks the result.
-- **Implementation** — work proceeds one milestone at a time against the
+- **Implementation**: work proceeds one milestone at a time against the
   spec in `docs/milestones/`, keeping the build green at every step.
 
 The loop is: **pick the lowest-numbered unfinished
@@ -37,7 +37,7 @@ milestone per pass. Do not jump ahead.
    If you need `memcpy`/`memset`/`strlen`, write them (put them in
    `src/string.c`).
 3. **Warnings are errors in spirit.** Code must compile clean under
-   `-Wall -Wextra`. Don't silence warnings — fix the cause.
+   `-Wall -Wextra`. Don't silence warnings: fix the cause.
 4. **Every new `.c` file drops into `src/` and every header into `include/`.**
    The Makefile auto-discovers them via a wildcard; no Makefile edits needed
    for new modules.
@@ -66,7 +66,7 @@ All commands run from the repo root on Ubuntu / WSL2.
 1. `make clean && make iso` succeeds with no warnings.
 2. `make run` boots to the expected screen output.
 3. For headless verification, the serial log contains the expected markers
-   (this is exactly what CI checks — see `.github/workflows/ci.yml`).
+   (this is exactly what CI checks: see `.github/workflows/ci.yml`).
 
 Never claim a milestone is done without having actually booted it.
 
@@ -127,13 +127,13 @@ commands and get responses, all running on the bare kernel with no host OS.
 
 ## 8. Tools reference
 
-- **NASM** — assembler for `boot/*.asm`.
-- **gcc + binutils (ld)** — freestanding C compiler and linker. A
+- **NASM**: assembler for `boot/*.asm`.
+- **gcc + binutils (ld)**: freestanding C compiler and linker. A
   `x86_64-elf-*` cross-toolchain is the "proper" upgrade; override `CC`/`LD`
   on the make command line to use it.
-- **GRUB (`grub-mkrescue`) + xorriso + mtools** — build the bootable ISO.
-- **QEMU (`qemu-system-x86_64`)** — the machine we boot on.
-- **GDB** — source-level debugging via `make debug` (see docs/09).
+- **GRUB (`grub-mkrescue`) + xorriso + mtools**: build the bootable ISO.
+- **QEMU (`qemu-system-x86_64`)**: the machine we boot on.
+- **GDB**: source-level debugging via `make debug` (see docs/09).
 
 That's the whole contract. Build one milestone, boot it, prove it, document
 it, commit it. Then the next.

@@ -1,4 +1,4 @@
-# 03 — Boot process
+# 03: Boot process
 
 This is the most subtle part of the kernel: getting from firmware to 64-bit C
 code. It is already implemented (milestone 0). This doc explains what each step
@@ -26,15 +26,15 @@ structure (which we'll use in milestone 5 for the memory map).
 
 Before touching long mode we verify the environment:
 
-- **Multiboot check** — `eax` must equal the magic value.
-- **CPUID check** — we can use CPUID only if the ID bit (21) of EFLAGS is
+- **Multiboot check**: `eax` must equal the magic value.
+- **CPUID check**: we can use CPUID only if the ID bit (21) of EFLAGS is
   toggleable.
-- **Long-mode check** — extended CPUID leaf `0x80000001` must report the LM bit
+- **Long-mode check**: extended CPUID leaf `0x80000001` must report the LM bit
   (EDX bit 29).
 
 If any check fails we print `ERR: <n>` to the VGA buffer and halt.
 
-### 3. Paging — the price of admission to long mode
+### 3. Paging: the price of admission to long mode
 
 x86-64 **requires paging to be enabled** before entering long mode. We build a
 minimal 4-level table:
@@ -52,9 +52,9 @@ the kernel and keeps early addressing trivial.
 Order matters:
 
 1. Load the PML4 physical address into **CR3**.
-2. Set **CR4.PAE** (bit 5) — 64-bit paging needs Physical Address Extension.
-3. Set **EFER.LME** (bit 8) via the `0xC0000080` MSR — "long mode enable."
-4. Set **CR0.PG** (bit 31) — turn paging on. The CPU is now in *compatibility*
+2. Set **CR4.PAE** (bit 5): 64-bit paging needs Physical Address Extension.
+3. Set **EFER.LME** (bit 8) via the `0xC0000080` MSR: "long mode enable."
+4. Set **CR0.PG** (bit 31): turn paging on. The CPU is now in *compatibility*
    mode (long mode active, but still running 32-bit code).
 
 ### 5. The far jump to 64-bit
@@ -89,7 +89,7 @@ loads the task register.
 
 ## References
 
-- OSDev Wiki — [Setting Up Long Mode](https://wiki.osdev.org/Setting_Up_Long_Mode)
-- OSDev Wiki — [Multiboot2](https://wiki.osdev.org/Multiboot)
-- Philipp Oppermann — [Entering Long Mode](https://os.phil-opp.com/entering-longmode/)
+- OSDev Wiki: [Setting Up Long Mode](https://wiki.osdev.org/Setting_Up_Long_Mode)
+- OSDev Wiki: [Multiboot2](https://wiki.osdev.org/Multiboot)
+- Philipp Oppermann: [Entering Long Mode](https://os.phil-opp.com/entering-longmode/)
   (Rust series, but the assembly bring-up maps directly to ours)

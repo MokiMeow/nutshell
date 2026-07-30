@@ -5,7 +5,7 @@ project, but clean contributions are welcome.
 
 ## Before you start
 
-- Read [AGENTS.md](AGENTS.md) — it is the operating manual for this repo and
+- Read [AGENTS.md](AGENTS.md): it is the operating manual for this repo and
   applies to humans too.
 - Skim [docs/00-overview.md](docs/00-overview.md) and the
   [roadmap](docs/04-roadmap.md).

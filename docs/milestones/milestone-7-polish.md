@@ -1,4 +1,4 @@
-# Milestone 7 — Polish (portfolio pass) ✅ (done)
+# Milestone 7: Polish (portfolio pass) ✅ (done)
 
 **Goal:** turn a working kernel into a repo that impresses on sight. The code is
 done; this is about proof, presentation, and repeatability.

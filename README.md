@@ -25,7 +25,7 @@ Nutshell is a small operating-system kernel built the hard way: no libc, no
 framework, no training wheels. GRUB drops us into 32-bit protected mode; from
 there the kernel sets up its own page tables, enters 64-bit long mode, installs
 interrupt handlers, drives the keyboard, manages physical memory, and finally
-boots into a shell running *on the bare metal* — no OS underneath it, because
+boots into a shell running *on the bare metal*: no OS underneath it, because
 this **is** the OS.
 
 It is deliberately scoped: enough to be real, small enough for one person to
@@ -50,19 +50,19 @@ in [docs/03-boot-process.md](docs/03-boot-process.md).
 
 ## Why it is interesting (the depth on show)
 
-- **The 32 → 64-bit transition, by hand** — CPUID feature detection, building
+- **The 32 → 64-bit transition, by hand**: CPUID feature detection, building
   4-level page tables, enabling PAE + `EFER.LME` + paging, and far-jumping
   through a 64-bit GDT. ([docs/03-boot-process.md](docs/03-boot-process.md))
-- **Interrupts from the silicon up** — a 64-bit IDT, remapping the legacy 8259
+- **Interrupts from the silicon up**: a 64-bit IDT, remapping the legacy 8259
   PIC, exception and IRQ handlers, and the PIT timer.
   ([docs/06-interrupts.md](docs/06-interrupts.md))
-- **Your own memory manager** — a physical-frame allocator over the multiboot
+- **Your own memory manager**: a physical-frame allocator over the multiboot
   memory map and a kernel heap, so `malloc` means *your* `malloc`.
   ([docs/05-memory-management.md](docs/05-memory-management.md))
-- **A real driver** — PS/2 keyboard on IRQ1, scancode-set-1 decoding, and an
+- **A real driver**: PS/2 keyboard on IRQ1, scancode-set-1 decoding, and an
   input ring buffer feeding the shell.
   ([docs/07-keyboard-and-drivers.md](docs/07-keyboard-and-drivers.md))
-- **A shell on bare metal** — a REPL with built-in commands, running with
+- **A shell on bare metal**: a REPL with built-in commands, running with
   nothing beneath it. ([docs/08-the-shell.md](docs/08-the-shell.md))
 
 ## Fault diagnostics
@@ -86,6 +86,13 @@ Serial output is mirrored to your terminal. See
 [docs/09-testing-and-debugging.md](docs/09-testing-and-debugging.md) for the
 QEMU + GDB workflow.
 
+## Requirements
+
+Nutshell builds on Ubuntu or WSL2 with `nasm`, GCC, GNU binutils, `make`,
+`xorriso`, GRUB rescue tools, `mtools`, and `qemu-system-x86_64`. The host must
+be x86-64. No graphical display is required: the build and self-test workflows
+use QEMU serial output as their source of truth.
+
 ## Status
 
 Nutshell **v1.0.0 is complete**. The kernel boots to `nutshell> `, all built-in
@@ -101,6 +108,14 @@ commands work, and CI smoke-boots both the interactive and self-test images.
 | 5 | Physical memory + kernel heap | ✅ done |
 | 6 | The shell | ✅ done |
 | 7 | Polish, tests, portfolio pass | ✅ done |
+
+## Limitations
+
+Nutshell currently targets BIOS boot through GRUB on x86-64. It uses VGA text
+mode, PS/2 keyboard input, identity-mapped low memory, and a single CPU core.
+There is no userspace, privilege separation, filesystem, networking, USB, ACPI
+enumeration, or SMP support. These boundaries keep the complete boot, interrupt,
+memory, driver, and shell path small enough to understand end to end.
 
 ## Repository layout
 
@@ -126,4 +141,4 @@ Everything is in [`docs/`](docs/). Start with
 
 ## License
 
-MIT — see [LICENSE](LICENSE).
+MIT: see [LICENSE](LICENSE).

@@ -1,6 +1,6 @@
-# 09 — Testing & debugging
+# 09: Testing & debugging
 
-Kernel bugs don't give you a stack trace by default — the machine just resets.
+Kernel bugs don't give you a stack trace by default: the machine just resets.
 These are the techniques that make Nutshell debuggable.
 
 ## Serial logging is your best friend
@@ -34,7 +34,7 @@ You can set breakpoints, step C code, and inspect memory and registers.
 ## The triple-fault trap
 
 If the CPU faults, and while handling that fault it faults again, and again,
-it **triple-faults** and resets — which looks like a silent reboot loop. Before
+it **triple-faults** and resets, which looks like a silent reboot loop. Before
 the IDT exists (pre-M3) any CPU exception does this. After M3, install exception
 handlers early so a fault *prints* instead of resetting. When you see QEMU
 rebooting in a loop, suspect an unhandled exception.
@@ -59,7 +59,7 @@ grep -q "Nutshell" serial.log
 
 As milestones land, extend the marker set: each subsystem's `*_init` can print
 a line like `[ok] idt`, and CI can assert they all appear. A QEMU **isa-debug-exit**
-device (port `0xF4`) lets a kernel test build exit QEMU with a chosen code — the
+device (port `0xF4`) lets a kernel test build exit QEMU with a chosen code: the
 basis for pass/fail kernel tests if you want them in milestone 7.
 
 Milestone 7 implements that path. `make test` builds a separate

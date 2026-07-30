@@ -1,4 +1,4 @@
-# Milestone 1 — I/O (`kprintf`) ✅ (done)
+# Milestone 1: I/O (`kprintf`) ✅ (done)
 
 **Goal:** formatted kernel output to both VGA and serial, so every later
 milestone is debuggable.
@@ -35,7 +35,7 @@ edit `src/kernel.c`.
 
 ## References
 
-- OSDev Wiki — [Printing to Screen](https://wiki.osdev.org/Printing_to_Screen)
-- OSDev Wiki — [Meaty Skeleton](https://wiki.osdev.org/Meaty_Skeleton) (tvout/printf structure)
+- OSDev Wiki: [Printing to Screen](https://wiki.osdev.org/Printing_to_Screen)
+- OSDev Wiki: [Meaty Skeleton](https://wiki.osdev.org/Meaty_Skeleton) (tvout/printf structure)
 
-**Next:** [Milestone 2 — GDT](milestone-2-gdt.md).
+**Next:** [Milestone 2: GDT](milestone-2-gdt.md).

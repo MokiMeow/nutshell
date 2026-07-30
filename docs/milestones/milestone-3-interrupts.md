@@ -1,4 +1,4 @@
-# Milestone 3 — Interrupts (IDT + PIC + PIT) ✅ (done)
+# Milestone 3: Interrupts (IDT + PIC + PIT) ✅ (done)
 
 **Goal:** turn hardware and CPU events into C handler calls. This unlocks the
 keyboard (M4) and gives clean fault reports instead of silent reboots.
@@ -43,9 +43,9 @@ edit `src/kernel.c`.
 
 ## References
 
-- OSDev Wiki — [Interrupt Descriptor Table](https://wiki.osdev.org/Interrupt_Descriptor_Table)
-- OSDev Wiki — [8259 PIC](https://wiki.osdev.org/8259_PIC)
-- OSDev Wiki — [Programmable Interval Timer](https://wiki.osdev.org/Programmable_Interval_Timer)
-- OSDev Wiki — [Interrupts Tutorial](https://wiki.osdev.org/Interrupts_Tutorial)
+- OSDev Wiki: [Interrupt Descriptor Table](https://wiki.osdev.org/Interrupt_Descriptor_Table)
+- OSDev Wiki: [8259 PIC](https://wiki.osdev.org/8259_PIC)
+- OSDev Wiki: [Programmable Interval Timer](https://wiki.osdev.org/Programmable_Interval_Timer)
+- OSDev Wiki: [Interrupts Tutorial](https://wiki.osdev.org/Interrupts_Tutorial)
 
-**Next:** [Milestone 4 — Keyboard](milestone-4-keyboard.md).
+**Next:** [Milestone 4: Keyboard](milestone-4-keyboard.md).

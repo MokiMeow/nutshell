@@ -6,13 +6,17 @@ to follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Changed
+- Expanded the README with explicit host requirements and current kernel
+  limitations, and standardized first-party Markdown punctuation.
+
 ### Fixed
 - Self-test harness: raised the QEMU timeout from 25s to 60s (and the CI
   smoke-boot from 20s to 60s) so slow cold/emulated runners without KVM are not
   mistaken for failures, and reported an infrastructure timeout (exit 2)
   separately from a guest test failure (exit 1).
 
-## [1.0.0] — 2026-07-23
+## [1.0.0]: 2026-07-23
 
 ### Added
 - Milestone 7: a separate isa-debug-exit kernel test image, full serial-marker
@@ -30,7 +34,7 @@ to follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   TSS with dedicated ring-0 and double-fault stacks.
 - Milestone 1: freestanding memory and string helpers, integer formatting, and
   `kprintf` output mirrored to VGA text mode and COM1 serial.
-- Milestone 0: bootable skeleton — multiboot2 header, 32→64-bit long-mode
+- Milestone 0: bootable skeleton: multiboot2 header, 32→64-bit long-mode
   bring-up (paging, PAE, EFER.LME, 64-bit GDT), minimal VGA text driver and
   COM1 serial driver, and a `kernel_main` banner.
 - Build system: `Makefile` (`make`/`iso`/`run`/`debug`/`clean`), `linker.ld`,
@@ -39,5 +43,5 @@ to follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   the boot banner over serial.
 - Documentation set under `docs/` and the `AGENTS.md` operating manual.
 
-## [0.1.0] — milestone 0
+## [0.1.0]: milestone 0
 - First bootable version: reaches 64-bit long mode and prints a banner.

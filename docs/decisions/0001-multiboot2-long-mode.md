@@ -1,4 +1,4 @@
-# ADR 0001 — Use GRUB/Multiboot2 and hand-write the long-mode transition
+# ADR 0001: Use GRUB/Multiboot2 and hand-write the long-mode transition
 
 **Status:** accepted · **Date:** 2026
 
@@ -22,8 +22,8 @@ Use **GRUB + multiboot2**, and **hand-write the 32→64-bit transition**
   which are the point here.
 - GRUB handles the firmware handshake reliably across BIOS setups and gives us
   a memory map for free (used in milestone 5).
-- Writing the long-mode transition *ourselves* — rather than letting a modern
-  bootloader do it — keeps the most instructive part (paging + mode switch) in
+- Writing the long-mode transition *ourselves*, rather than letting a modern
+  bootloader do it: keeps the most instructive part (paging + mode switch) in
   our own code. That's the depth we want on show.
 
 ## Consequences

@@ -1,4 +1,4 @@
-# 07 — Keyboard & drivers
+# 07: Keyboard & drivers
 
 *Implemented in milestone 4.* Concept reference; build steps in
 [milestones/milestone-4-keyboard.md](milestones/milestone-4-keyboard.md).
@@ -66,5 +66,5 @@ Arrow-key history is a stretch goal (the scancodes are extended, prefixed with
 
 ## References
 
-- OSDev Wiki — [PS/2 Keyboard](https://wiki.osdev.org/PS/2_Keyboard)
-- OSDev Wiki — ["8042" PS/2 Controller](https://wiki.osdev.org/%228042%22_PS/2_Controller)
+- OSDev Wiki: [PS/2 Keyboard](https://wiki.osdev.org/PS/2_Keyboard)
+- OSDev Wiki: ["8042" PS/2 Controller](https://wiki.osdev.org/%228042%22_PS/2_Controller)

@@ -1,6 +1,6 @@
-# Milestone 5 — Memory (physical allocator + kernel heap) ✅ (done)
+# Milestone 5: Memory (physical allocator + kernel heap) ✅ (done)
 
-**Goal:** dynamic memory in the kernel — a physical frame allocator over the
+**Goal:** dynamic memory in the kernel: a physical frame allocator over the
 real memory map, and a `kmalloc`/`kfree` heap on top.
 
 ## Concepts
@@ -40,8 +40,8 @@ multiboot pointer).
 
 ## References
 
-- OSDev Wiki — [Page Frame Allocation](https://wiki.osdev.org/Page_Frame_Allocation)
-- OSDev Wiki — [Memory Map (x86)](https://wiki.osdev.org/Memory_Map_(x86))
-- OSDev Wiki — [Writing a memory manager](https://wiki.osdev.org/Memory_Allocation)
+- OSDev Wiki: [Page Frame Allocation](https://wiki.osdev.org/Page_Frame_Allocation)
+- OSDev Wiki: [Memory Map (x86)](https://wiki.osdev.org/Memory_Map_(x86))
+- OSDev Wiki: [Writing a memory manager](https://wiki.osdev.org/Memory_Allocation)
 
-**Next:** [Milestone 6 — The shell](milestone-6-shell.md).
+**Next:** [Milestone 6: The shell](milestone-6-shell.md).

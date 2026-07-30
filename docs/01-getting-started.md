@@ -1,4 +1,4 @@
-# 01 — Getting started
+# 01: Getting started
 
 Everything here is free and local. On Windows, do all of this **inside WSL2**
 (Ubuntu). On Linux, run it directly.
@@ -84,10 +84,10 @@ make run CC=x86_64-elf-gcc LD=x86_64-elf-ld
 
 ## Troubleshooting
 
-- **`grub-mkrescue: command not found`** — install `grub-pc-bin grub-common`.
-- **`xorriso : FAILURE`** — install `xorriso` and `mtools`.
-- **Blank QEMU window** — check the serial output in your terminal; if the
+- **`grub-mkrescue: command not found`**: install `grub-pc-bin grub-common`.
+- **`xorriso : FAILURE`**: install `xorriso` and `mtools`.
+- **Blank QEMU window**: check the serial output in your terminal; if the
   banner is there, VGA text mode just needs the window focused/redrawn.
-- **`make run` hangs with no window (headless server / WSL without WSLg)** —
+- **`make run` hangs with no window (headless server / WSL without WSLg)**:
   boot headless and read serial instead:
   `qemu-system-x86_64 -cdrom build/nutshell.iso -display none -serial stdio`.

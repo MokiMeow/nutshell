@@ -1,6 +1,6 @@
-# Milestone 6 — The shell ✅ (done)
+# Milestone 6: The shell ✅ (done)
 
-**Goal:** the payoff — an interactive prompt running on the bare kernel, reading
+**Goal:** the payoff: an interactive prompt running on the bare kernel, reading
 lines from the keyboard, dispatching to built-in commands.
 
 ## Concepts
@@ -11,17 +11,17 @@ subsystem together.
 
 ## Tasks
 
-- [x] `src/shell.c` + `include/shell.h`: `shell_run()` — print `nutshell> `,
+- [x] `src/shell.c` + `include/shell.h`: `shell_run()`: print `nutshell> `,
       read a line via `keyboard_getchar()` with echo + backspace, tokenise on
       spaces into `argv`, look up and call the command.
 - [x] Implement built-ins:
-  - [x] `help` — list commands + one-line help each.
-  - [x] `echo` — print the arguments.
-  - [x] `clear` — `vga_clear()`.
-  - [x] `mem` — print `mem_stats()` (from M5).
-  - [x] `uptime` — `timer_ticks()` → seconds (from M3).
-  - [x] `reboot` — pulse the 8042 reset line (fallback: triple fault).
-  - [x] `panic` — trigger a fault to demo the exception handlers.
+  - [x] `help`: list commands + one-line help each.
+  - [x] `echo`: print the arguments.
+  - [x] `clear`: `vga_clear()`.
+  - [x] `mem`: print `mem_stats()` (from M5).
+  - [x] `uptime`: `timer_ticks()` → seconds (from M3).
+  - [x] `reboot`: pulse the 8042 reset line (fallback: triple fault).
+  - [x] `panic`: trigger a fault to demo the exception handlers.
 - [x] Handle unknown commands and empty lines gracefully.
 - [x] Call `shell_run()` at the end of `kernel_main` (after all `*_init`).
 
@@ -41,6 +41,6 @@ subsystem together.
 
 ## References
 
-- [docs/08 — The shell](../08-the-shell.md) (design + command-table pattern)
+- [docs/08: The shell](../08-the-shell.md) (design + command-table pattern)
 
-**Next:** [Milestone 7 — Polish](milestone-7-polish.md).
+**Next:** [Milestone 7: Polish](milestone-7-polish.md).

@@ -1,4 +1,4 @@
-# 08 — The shell
+# 08: The shell
 
 *Implemented in milestone 6.* This is the payoff: an interactive prompt running
 on the bare kernel. Build steps in
@@ -8,7 +8,7 @@ on the bare kernel. Build steps in
 
 A read–eval–print loop (REPL). It reads a line from the keyboard buffer, parses
 it into a command and arguments, dispatches to a built-in, prints the result,
-and loops. No processes, no external programs — every command is a C function
+and loops. No processes, no external programs: every command is a C function
 compiled into the kernel.
 
 ```
@@ -28,10 +28,10 @@ loop:
 | `help` | List available commands. |
 | `echo <args>` | Print the arguments back. |
 | `clear` | Clear the screen (VGA). |
-| `mem` | Show memory stats (total/used/free frames — from M5). |
+| `mem` | Show memory stats (total/used/free frames: from M5). |
 | `uptime` | Show timer ticks / seconds since boot (from M3). |
 | `reboot` | Reboot the machine (8042 pulse or triple-fault). |
-| `panic` | Deliberately trigger a fault — proves the exception handlers. |
+| `panic` | Deliberately trigger a fault: proves the exception handlers. |
 
 Adding a command = one function + one row in the dispatch table. Keep them
 tiny; the shell's value is the *machinery*, not a big command set.
@@ -57,13 +57,13 @@ static const struct command commands[] = {
 };
 ```
 
-Dispatch is a linear search over this table — clear and more than fast enough.
+Dispatch is a linear search over this table: clear and more than fast enough.
 
 ## Parsing
 
 A minimal tokenizer: split the input line on runs of spaces into an `argv`
 array (fixed max args), null-terminate each token in place. No quoting, no pipes
-in v1 — those are stretch goals.
+in v1: those are stretch goals.
 
 The implementation uses a 128-byte input line and at most 16 arguments.
 Backspace edits only when the line is non-empty, overlong printable input is
