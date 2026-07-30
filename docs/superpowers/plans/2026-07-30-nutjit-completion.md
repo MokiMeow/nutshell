@@ -1,6 +1,6 @@
 # NutJIT Completion Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [x]`) syntax for tracking.
 
 **Goal:** Complete NutJIT's project guide, remove all first-party Markdown em dashes, and reverify language semantics, machine encodings, and the benchmark.
 
@@ -29,7 +29,7 @@
 - Consumes: Existing language examples, measured benchmark, and architecture docs.
 - Produces: README architecture, limitations, documentation links, and zero em dashes.
 
-- [ ] **Step 1: Add architecture and limitation sections**
+- [x] **Step 1: Add architecture and limitation sections**
 
 Add an execution pipeline showing `source -> lexer -> parser -> AST ->
 interpreter or x86-64 codegen -> executable memory`. Add limitations covering
@@ -38,12 +38,12 @@ format, and no optimization claims beyond those measured. Add documentation
 links to parser, codegen, JIT memory, calling convention, optimization, and
 testing.
 
-- [ ] **Step 2: Rewrite the three roadmap em dashes**
+- [x] **Step 2: Rewrite the three roadmap em dashes**
 
 Edit lines 20 through 22 of `docs/04-roadmap.md` with context-appropriate
 punctuation.
 
-- [ ] **Step 3: Verify Markdown**
+- [x] **Step 3: Verify Markdown**
 
 ```powershell
 $dash = [char]0x2014
@@ -54,7 +54,7 @@ if (Get-ChildItem -Recurse -File -Filter *.md |
 
 Expected: exit 0.
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add README.md CHANGELOG.md docs
@@ -72,7 +72,7 @@ git commit -m "docs(readme): complete jit guide"
 - Consumes: JIT and interpreter implementations.
 - Produces: Differential, encoding, sample, and benchmark evidence.
 
-- [ ] **Step 1: Clean build and tests**
+- [x] **Step 1: Clean build and tests**
 
 ```bash
 make clean && make all
@@ -82,7 +82,7 @@ make test
 Expected: warning-free build, all semantic comparisons pass, and all encoding
 checks pass.
 
-- [ ] **Step 2: Run examples and benchmark**
+- [x] **Step 2: Run examples and benchmark**
 
 ```bash
 make run
@@ -92,7 +92,7 @@ make bench | tee build/benchmark.txt
 Expected: sample programs return their documented values and the benchmark
 completes with finite positive timings.
 
-- [ ] **Step 3: Merge, push, and watch CI**
+- [x] **Step 3: Merge, push, and watch CI**
 
 ```bash
 git switch main

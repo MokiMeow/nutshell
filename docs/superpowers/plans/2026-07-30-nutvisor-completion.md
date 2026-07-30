@@ -1,6 +1,6 @@
 # Nutvisor Completion Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [x]`) syntax for tracking.
 
 **Goal:** Publish a complete Nutvisor README, remove all first-party Markdown em dashes, and reverify every KVM guest path.
 
@@ -29,7 +29,7 @@
 - Consumes: Existing VMM architecture, guest flow, KVM setup script, and demo.
 - Produces: Explicit requirements, limitations, documentation navigation, and zero em dashes.
 
-- [ ] **Step 1: Add README completeness sections**
+- [x] **Step 1: Add README completeness sections**
 
 Add `## Limitations` covering x86-64 Linux, KVM availability, one vCPU, no
 device model beyond the documented ports/MMIO, no live migration, and no
@@ -37,11 +37,11 @@ security isolation claim. Add `## Documentation` linking the overview,
 architecture, KVM API, guest memory, vCPU modes, devices, ELF loader, and
 testing guide.
 
-- [ ] **Step 2: Rewrite the single em dash**
+- [x] **Step 2: Rewrite the single em dash**
 
 Edit `docs/06-vcpu-and-modes.md` according to sentence meaning.
 
-- [ ] **Step 3: Verify the Markdown condition**
+- [x] **Step 3: Verify the Markdown condition**
 
 ```powershell
 $dash = [char]0x2014
@@ -53,7 +53,7 @@ if ($hits) { $hits; exit 1 }
 
 Expected: no output.
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add README.md CHANGELOG.md docs
@@ -70,7 +70,7 @@ git commit -m "docs(readme): complete vmm guide"
 - Consumes: Real-mode, long-mode, serial, MMIO, fault, and ELF guest images.
 - Produces: Warning-free builds and runtime evidence for each guest path.
 
-- [ ] **Step 1: Run the clean build**
+- [x] **Step 1: Run the clean build**
 
 ```bash
 make clean && make all
@@ -78,7 +78,7 @@ make clean && make all
 
 Expected: exit 0 with no warnings.
 
-- [ ] **Step 2: Check KVM before runtime testing**
+- [x] **Step 2: Check KVM before runtime testing**
 
 ```bash
 make check-kvm
@@ -87,7 +87,7 @@ make check-kvm
 Expected: exit 0. If it fails, record the exact `/dev/kvm` limitation and do
 not report the runtime suite as passed.
 
-- [ ] **Step 3: Run the complete suite**
+- [x] **Step 3: Run the complete suite**
 
 ```bash
 make test
@@ -97,7 +97,7 @@ make run
 Expected: every guest marker in `scripts/self-test.sh` passes and the ELF guest
 exits cleanly.
 
-- [ ] **Step 4: Merge, push, and watch CI**
+- [x] **Step 4: Merge, push, and watch CI**
 
 ```bash
 git switch main

@@ -1,6 +1,6 @@
 # NutDB Completion Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [x]`) syntax for tracking.
 
 **Goal:** Complete NutDB's operational README and reverify storage, SQL, MVCC, Raft, recovery, and cluster behavior.
 
@@ -28,18 +28,18 @@
 - Consumes: Existing architecture, durability result, limitations, and demo.
 - Produces: Explicit tool requirements and complete documentation navigation.
 
-- [ ] **Step 1: Add requirements**
+- [x] **Step 1: Add requirements**
 
 Add `## Requirements` with Rust stable, Cargo, a loopback TCP-capable host, and
 shell requirements for `scripts/cluster-demo.sh`. State that the library has no
 third-party crate dependencies.
 
-- [ ] **Step 2: Add documentation navigation**
+- [x] **Step 2: Add documentation navigation**
 
 Add `## Documentation` linking overview, architecture, durability, MVCC, SQL,
 Raft, testing, glossary, decisions, and milestones.
 
-- [ ] **Step 3: Verify the punctuation invariant**
+- [x] **Step 3: Verify the punctuation invariant**
 
 ```powershell
 $dash = [char]0x2014
@@ -50,7 +50,7 @@ if (Get-ChildItem -Recurse -File -Filter *.md |
 
 Expected: exit 0.
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add README.md CHANGELOG.md
@@ -73,7 +73,7 @@ git commit -m "docs(readme): complete database guide"
 - Consumes: Complete storage and distributed database stack.
 - Produces: Release build, full test, and real cluster-demo evidence.
 
-- [ ] **Step 1: Run formatting and static diagnostics**
+- [x] **Step 1: Run formatting and static diagnostics**
 
 ```bash
 cargo fmt --check
@@ -82,7 +82,7 @@ cargo clippy --all-targets -- -D warnings
 
 Expected: both commands exit 0.
 
-- [ ] **Step 2: Build and test**
+- [x] **Step 2: Build and test**
 
 ```bash
 cargo build --release
@@ -91,7 +91,7 @@ cargo test --all-targets
 
 Expected: warning-free release build and every test passes.
 
-- [ ] **Step 3: Run the cluster demonstration**
+- [x] **Step 3: Run the cluster demonstration**
 
 ```bash
 bash scripts/cluster-demo.sh
@@ -100,7 +100,7 @@ bash scripts/cluster-demo.sh
 Expected: the documented leader, replication, failover, and recovery markers
 appear.
 
-- [ ] **Step 4: Merge, push, and watch CI**
+- [x] **Step 4: Merge, push, and watch CI**
 
 ```bash
 git switch main

@@ -1,6 +1,6 @@
 # Nutshell Completion Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [x]`) syntax for tracking.
 
 **Goal:** Verify Nutshell from a clean build through a headless shell boot, remove all first-party Markdown em dashes, and make the README a complete and evidence-backed project entry point.
 
@@ -32,7 +32,7 @@
 - Consumes: Existing boot GIF, panic screenshot, milestone status, and verification commands.
 - Produces: A complete README and a repository-wide zero-em-dash Markdown result.
 
-- [ ] **Step 1: Record the punctuation baseline**
+- [x] **Step 1: Record the punctuation baseline**
 
 Run:
 
@@ -45,7 +45,7 @@ Get-ChildItem -Recurse -File -Filter *.md |
 
 Expected: exactly three first-party matches, all outside `README.md`.
 
-- [ ] **Step 2: Add the missing operational sections**
+- [x] **Step 2: Add the missing operational sections**
 
 Add `## Requirements` after Quick Start with the supported WSL2/Linux host,
 required x86-64 virtualization, toolchain names, and headless QEMU requirement.
@@ -54,12 +54,12 @@ mode, PS/2 input, identity mapping, single core, and no userspace or filesystem.
 Keep the current status, architecture links, screenshots, and exact shell
 commands.
 
-- [ ] **Step 3: Rewrite every em dash in context**
+- [x] **Step 3: Rewrite every em dash in context**
 
 Use sentence splits, commas, colons, or parentheses in the four files listed
 above. Do not replace an em dash blindly with a hyphen.
 
-- [ ] **Step 4: Verify local documentation links and punctuation**
+- [x] **Step 4: Verify local documentation links and punctuation**
 
 Run:
 
@@ -74,7 +74,7 @@ rg -n '\]\((docs/|assets/)[^)]+\)' README.md
 
 Expected: no punctuation hits; every printed local target exists.
 
-- [ ] **Step 5: Commit the editorial pass**
+- [x] **Step 5: Commit the editorial pass**
 
 ```bash
 git add README.md CHANGELOG.md docs
@@ -92,7 +92,7 @@ git commit -m "docs(readme): complete project guide"
 - Consumes: Existing kernel and self-test ISO targets.
 - Produces: Clean build output, serial boot evidence, and a green self-test.
 
-- [ ] **Step 1: Build from a clean tree**
+- [x] **Step 1: Build from a clean tree**
 
 Run in Ubuntu WSL:
 
@@ -103,7 +103,7 @@ make clean && make iso
 
 Expected: exit 0 with no compiler or linker warnings.
 
-- [ ] **Step 2: Boot headlessly and assert the shell markers**
+- [x] **Step 2: Boot headlessly and assert the shell markers**
 
 ```bash
 rm -f serial.log
@@ -118,7 +118,7 @@ done
 
 Expected: all marker assertions succeed.
 
-- [ ] **Step 3: Run the in-kernel self-test image**
+- [x] **Step 3: Run the in-kernel self-test image**
 
 ```bash
 make test
@@ -126,7 +126,7 @@ make test
 
 Expected: exit 0 with all self-test markers and no timeout classification.
 
-- [ ] **Step 4: Publish and inspect CI**
+- [x] **Step 4: Publish and inspect CI**
 
 ```bash
 git switch main
