@@ -6,6 +6,12 @@ to follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+- Support Caps Lock for alphabetic PS/2 input, including correct interaction
+  with either Shift key; release events do not toggle the state.
+- Separate pure keymap decoding from the keyboard ISR and add a host-executable
+  regression suite (`make test-keymap`) requiring no QEMU.
+
 ### Changed
 - Expanded the README with explicit host requirements and current kernel
   limitations, and standardized first-party Markdown punctuation.

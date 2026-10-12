@@ -11,6 +11,7 @@ CC            := gcc
 LD            := ld
 NASM          := nasm
 QEMU          := qemu-system-x86_64
+HOST_CC       ?= cc
 GRUB_MKRESCUE := grub-mkrescue
 
 CFLAGS  := -std=c11 -m64 -ffreestanding -fno-pic -fno-pie \
@@ -39,7 +40,7 @@ TEST_ASM_OBJ := $(patsubst boot/%.asm,$(TEST_BUILD)/%.o,$(ASM_SRC))
 TEST_C_OBJ   := $(patsubst src/%.c,$(TEST_BUILD)/%.o,$(C_SRC))
 TEST_OBJ     := $(TEST_ASM_OBJ) $(TEST_C_OBJ)
 
-.PHONY: all iso test-iso test run debug clean
+.PHONY: all iso test-iso test test-keymap run debug clean
 
 all: $(KERNEL)
 
@@ -85,6 +86,12 @@ $(TEST_ISO): $(TEST_KERNEL) grub/grub.cfg
 
 test: $(TEST_ISO)
 	bash tests/run-selftest.sh $(TEST_ISO)
+
+# Pure decoder tests run on the host without NASM, QEMU or GRUB.
+test-keymap: | $(BUILD)
+	$(HOST_CC) -std=c11 -Wall -Wextra -Werror -Iinclude \
+		src/keymap.c tests/keymap_host_test.c -o $(BUILD)/keymap-host-test
+	./$(BUILD)/keymap-host-test
 
 # Boot the kernel. Serial output is mirrored to your terminal.
 run: $(ISO)

@@ -59,8 +59,8 @@ in [docs/03-boot-process.md](docs/03-boot-process.md).
 - **Your own memory manager**: a physical-frame allocator over the multiboot
   memory map and a kernel heap, so `malloc` means *your* `malloc`.
   ([docs/05-memory-management.md](docs/05-memory-management.md))
-- **A real driver**: PS/2 keyboard on IRQ1, scancode-set-1 decoding, and an
-  input ring buffer feeding the shell.
+- **A real driver**: PS/2 keyboard on IRQ1, scancode-set-1 decoding with
+  Shift and Caps Lock, and an input ring buffer feeding the shell.
   ([docs/07-keyboard-and-drivers.md](docs/07-keyboard-and-drivers.md))
 - **A shell on bare metal**: a REPL with built-in commands, running with
   nothing beneath it. ([docs/08-the-shell.md](docs/08-the-shell.md))
@@ -77,6 +77,7 @@ can report the vector and register state instead of silently rebooting.
 ```bash
 ./scripts/setup-wsl.sh   # one-time: nasm, gcc, binutils, grub, qemu
 make run                 # build the ISO and boot Nutshell in QEMU
+make test-keymap         # test keyboard decoding without QEMU
 make test                # run PMM, heap, and scripted-shell tests in QEMU
 ```
 
