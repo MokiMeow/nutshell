@@ -16,9 +16,17 @@ The keyboard sends **scancode set 1** by default:
 - A key *press* sends a make code (e.g. `0x1E` for `A`).
 - A key *release* sends the same code OR'd with `0x80`.
 
-We keep a lookup table from make code → ASCII, track modifier state (shift for
-upper case / symbols), and ignore releases except for modifiers. Special keys
-(Enter, Backspace) map to `\n` and a backspace action.
+We keep a lookup table from make code → ASCII and track left/right Shift
+and Caps Lock. Shift selects punctuation/symbols; Caps Lock toggles letters only,
+so Shift + Caps Lock produces lowercase letters while Shift + number continues
+to produce symbols. Caps Lock toggles on key press, not release; the hardware LED
+is not synchronized yet. Releases update the Shift state and otherwise produce
+no characters. Enter and Backspace map to `\n` and `\b`.
+
+The stateful scancode decoder is isolated in `src/keymap.c` from the port-I/O
+interrupt handler in `src/keyboard.c`. Run `make test-keymap` to check the
+modifier, release, extended-key and ASCII mapping rules on an ordinary host,
+without booting QEMU; `make test` still verifies in-kernel behavior.
 
 ## The input ring buffer
 
