@@ -35,7 +35,7 @@ IRQ1 ─► keyboard ISR ─► decode ─► ring_buffer_push(c)
 
 This producer/consumer split is the standard pattern for interrupt-driven
 input and keeps the ISR fast. Nutshell uses a 128-byte buffer; if it fills, the
-producer drops the newest character rather than overwriting unread input.
+producer drops the newest character rather than overwriting unread input. The\nhead and tail indexes wrap with a bounded comparison instead of an integer\nremainder operation, keeping the keyboard IRQ's hot path inexpensive.
 
 `keyboard_getchar()` briefly disables interrupts while checking and popping
 the buffer. When it is empty, the adjacent `sti; hlt` instructions enable
