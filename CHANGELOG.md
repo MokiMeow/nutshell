@@ -7,6 +7,8 @@ to follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ## [Unreleased]
 
 ### Changed
+- Avoid integer remainder in keyboard ring-buffer wraparound while preserving
+  the full/empty rules and usable capacity.
 - Expanded the README with explicit host requirements and current kernel
   limitations, and standardized first-party Markdown punctuation.
 
