@@ -24,14 +24,17 @@ multiboot memory map   ← what RAM actually exists
 GRUB gives us a **memory map** in the multiboot2 info structure (the pointer
 GRUB left in `ebx` at boot, which the 32-bit entry saves before CPUID can
 clobber it and the 64-bit stub passes to `kernel_main`). It lists regions
-and whether each is usable. We walk it to find the largest usable region above
-the kernel image.
+and whether each is usable. We validate the complete tag list, then use all
+usable regions below the identity-map limit rather than assuming the map is
+sorted or choosing just its largest entry.
 
 Key addresses we must not stomp:
 - below 1 MiB: BIOS/VGA/legacy: off limits.
 - the kernel image itself (`1 MiB … end`): the linker can export an `end`
 symbol so we know where free memory starts.
 - the multiboot info structure itself: it remains reserved after parsing.
+- every boot module: even a region marked available may contain an initrd or
+  another module loaded by GRUB.
 
 Only frames below **1 GiB** are managed because that is the region mapped by
 the early page tables. Returning higher physical addresses before extending
@@ -45,6 +48,24 @@ regions used at init; `pmm_alloc()` scans for a free bit, `pmm_free()` clears
 one. A second ownership bitmap records which used frames were actually handed
 out, so invalid frees cannot release the kernel, multiboot data, or reserved
 hardware regions.
+
+Only complete 4 KiB pages inside available entries become free. A second pass
+reserves every page touched by any nonavailable entry, including unknown types.
+This makes reserved regions win over overlapping available regions regardless
+of entry order. Empty ranges do nothing, and range clipping occurs before
+rounding so large firmware lengths cannot wrap around.
+
+Before touching allocator state, the parser checks the aligned boot-info
+envelope and every tag, including tags after the memory map. It requires a
+final eight-byte end tag, complete memory-map entries, and well-formed module
+descriptors. Unknown tags, larger entry strides, future compatible memory-map
+versions, and reserved fields remain supported. Duplicate memory-map tags are
+rejected as ambiguous. Any failed initialization disables allocation rather
+than exposing a partially configured or stale map.
+
+The allocator is single-core and is not called from IRQ handlers. These checks
+protect allocator bookkeeping, not against arbitrary writes by kernel code;
+there is still no userspace isolation or page-level access protection.
 
 - Pros: simple, O(n) scan is fine at this scale, easy to reason about.
 - Alternative: a free-list stack of frames (O(1) alloc/free): a reasonable
@@ -80,3 +101,5 @@ the arena coalesces back into one block.
 
 - OSDev Wiki: [Page Frame Allocation](https://wiki.osdev.org/Page_Frame_Allocation)
 - OSDev Wiki: [Memory Map (x86)](https://wiki.osdev.org/Memory_Map_(x86))
+- GNU: [Multiboot2 boot information](https://www.gnu.org/software/grub/manual/multiboot2/html_node/Boot-information-format.html)
+- Design and research: [Conservative boot-memory ownership](decisions/0004-boot-memory-ownership.md)

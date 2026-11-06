@@ -42,6 +42,17 @@ hello`, `mem`, `uptime`, `clear`, `reboot`; each works. Everything runs on the
 bare kernel with no host OS. CI is green, the README has the boot-to-shell GIF,
 and the release is tagged `v1.0.0`.
 
+## Post-v1.0.0 hardening
+
+- Conservative Multiboot2 ownership: validate the entire boot-data envelope,
+  preserve modules and overlapping reserved ranges, and fail closed.
+- Synthetic memory-map regressions in the kernel and on the host, with native
+  sanitizer/mutation checks and QEMU coverage across different RAM sizes.
+- Rebuild both kernel variants after header changes and fail on C warnings.
+
+See [decision 0004](decisions/0004-boot-memory-ownership.md) for the research,
+compatibility choices and remaining boundaries.
+
 ## Stretch goals (after v1.0.0: optional, not required)
 
 - Command history and line editing (arrow keys, backspace already in M4).

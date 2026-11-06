@@ -7,6 +7,17 @@ on:
     branches: [ main ]
 
 jobs:
+  host-memory-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run optimized allocator regressions and tag mutations
+        run: make test-host
+      - name: Run address and undefined-behavior sanitizers
+        run: |
+          make test-host BUILD=build/sanitized \
+            HOST_CFLAGS="-O1 -g -Wall -Wextra -Werror -fsanitize=address,undefined -fno-sanitize-recover=all"
+
   build-and-boot:
     runs-on: ubuntu-latest
     steps:
@@ -50,4 +61,16 @@ jobs:
           done
 
       - name: Run in-kernel self-tests
-        run: make test
+        run: |
+          for memory in 16M 64M 256M; do
+            make test QEMU_MEMORY="$memory"
+          done
+
+      - name: Preserve boot and self-test logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: kernel-serial-logs
+          path: |
+            serial.log
+            build/selftest-serial.log

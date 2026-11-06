@@ -68,6 +68,40 @@ shell command, and writes guest status zero to `0xF4`. QEMU encodes that as
 host status one; `tests/run-selftest.sh` validates and translates it to a
 normal successful exit code for CI.
 
+The test image first runs synthetic Multiboot2 maps, then restores the real
+boot map before initializing the heap. These tests cover overlapping reserved
+ranges, modules, partial pages, malformed/truncated tags, extensible entries,
+allocation exhaustion and invalid frees. The success marker is
+`[ok] test-pmm-map`. A failure reports the source line in `src/pmm_test.c`.
+
+Run the same allocator/parser code without GRUB or QEMU:
+
+```bash
+make test-host
+make test-host BUILD=build/sanitized \
+  HOST_CFLAGS="-O1 -g -Wall -Wextra -Werror -fsanitize=address,undefined -fno-sanitize-recover=all"
+```
+
+The host build also runs 12,288 single-byte mutations of the tag list inside a
+fixed-size envelope. Its non-PIE executable keeps synthetic boot information
+below the kernel's one-GiB boundary. It does not dereference allocated physical
+frames and does not substitute for a real boot. If your sandbox prevents leak
+sanitizer from inspecting processes, use `ASAN_OPTIONS=detect_leaks=0` for that
+command; address and undefined-behavior checks remain enabled. The test uses no
+dynamic host allocations.
+
+CI runs optimized and sanitized host tests plus real kernel tests with 16, 64,
+and 256 MiB of RAM. You can select another QEMU RAM size or binary:
+
+```bash
+make test QEMU_MEMORY=16M QEMU=qemu-system-x86_64
+```
+
+Normal and test builds track included headers automatically, so a header-only
+edit rebuilds affected objects. Compiler warnings fail the build. A self-test
+timeout is reported separately from an explicit guest failure; it can mean
+either a slow host or a hung guest, and requires inspecting the serial log.
+
 ## Common failure modes
 
 | Symptom | Likely cause |

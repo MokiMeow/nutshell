@@ -6,11 +6,24 @@ to follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+- Synthetic Multiboot2 memory-map regressions in the QEMU test kernel and a
+  GCC-only `make test-host` target, including 12,288 tag-byte mutations and
+  address/undefined-behavior sanitizer CI coverage.
+- QEMU allocator tests at 16, 64 and 256 MiB of RAM, with retained serial logs.
+
 ### Changed
 - Expanded the README with explicit host requirements and current kernel
   limitations, and standardized first-party Markdown punctuation.
 
 ### Fixed
+- Physical allocation preserves boot modules and every reserved overlap,
+  validates complete boot tag chains before use, and fails closed on invalid
+  initialization. Extensible memory-map versions and ignored reserved fields
+  remain compatible with the Multiboot2 specification.
+- Header changes rebuild both normal and test objects; C warnings now fail the
+  build, and the self-test runner respects the selected QEMU binary/RAM size.
+- Timeout diagnostics no longer imply that a potentially hung guest is healthy.
 - Self-test harness: raised the QEMU timeout from 25s to 60s (and the CI
   smoke-boot from 20s to 60s) so slow cold/emulated runners without KVM are not
   mistaken for failures, and reported an infrastructure timeout (exit 2)

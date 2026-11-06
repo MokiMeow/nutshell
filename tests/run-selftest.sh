@@ -8,7 +8,8 @@ log=build/selftest-serial.log
 timeout_seconds=${SELFTEST_TIMEOUT:-60}
 
 rm -f "$log"
-timeout "$timeout_seconds" qemu-system-x86_64 \
+timeout "$timeout_seconds" "${QEMU:-qemu-system-x86_64}" \
+    -m "${QEMU_MEMORY:-128M}" \
     -cdrom "$iso" \
     -display none \
     -serial "file:$log" \
@@ -21,11 +22,11 @@ echo "----- selftest serial -----"
 cat "$log"
 
 # `timeout` returns 124 when it has to kill QEMU. Report that as an
-# infrastructure timeout (exit 2), NOT a guest test failure (exit 1), so a
-# slow runner is never confused with a broken kernel.
+# timeout (exit 2), distinct from a reported guest test failure (exit 1).
+# Both a slow runner and a guest hang can cause this; preserve the evidence.
 if [[ $status -eq 124 ]]; then
     echo "TIMEOUT: self-test exceeded ${timeout_seconds}s before QEMU exited" >&2
-    echo "         (usually a slow cold/emulated runner, not a guest failure)" >&2
+    echo "         Check the serial log: the guest may have hung or the runner may be slow." >&2
     exit 2
 fi
 
@@ -36,6 +37,7 @@ if [[ $status -ne 1 ]]; then
     exit 1
 fi
 
+grep -Fq "[ok] test-pmm-map" "$log"
 grep -Fq "[ok] test-pmm" "$log"
 grep -Fq "[ok] test-heap" "$log"
 grep -Fq "scripted-shell-ok" "$log"

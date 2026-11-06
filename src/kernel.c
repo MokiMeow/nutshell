@@ -39,6 +39,16 @@ void kernel_main(uintptr_t multiboot_info_address) {
     kprintf("[ok] serial\n");
     kprintf("[ok] vga\n");
 
+#ifdef KERNEL_TEST
+    int memory_test_line = pmm_map_self_test();
+    if (memory_test_line != 0) {
+        kprintf("[FAIL] test-pmm-map at line %d\n", memory_test_line);
+        init_failure("pmm-map-selftest");
+    }
+    kprintf("[ok] test-pmm-map\n");
+#endif
+    /* Synthetic map tests replace allocator state; restore GRUB's map before
+     * any real allocations or heap initialization. */
     if (!pmm_init(multiboot_info_address))
         init_failure("pmm");
     kprintf("[ok] pmm\n");

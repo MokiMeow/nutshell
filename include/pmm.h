@@ -18,3 +18,7 @@ uintptr_t pmm_alloc_contiguous(size_t count);
 void pmm_free(uintptr_t frame);
 struct pmm_stats pmm_get_stats(void);
 bool pmm_self_test(void);
+#ifdef KERNEL_TEST
+/* Returns zero on success, or the failing source line in pmm_test.c. */
+int pmm_map_self_test(void);
+#endif

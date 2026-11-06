@@ -78,6 +78,7 @@ can report the vector and register state instead of silently rebooting.
 ./scripts/setup-wsl.sh   # one-time: nasm, gcc, binutils, grub, qemu
 make run                 # build the ISO and boot Nutshell in QEMU
 make test                # run PMM, heap, and scripted-shell tests in QEMU
+make test-host           # fast memory-map regressions, GCC only
 ```
 
 You should see Nutshell boot into 64-bit long mode and print its banner.

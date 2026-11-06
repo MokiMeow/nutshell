@@ -6,6 +6,7 @@
 #include "string.h"
 
 #define MULTIBOOT_TAG_END 0
+#define MULTIBOOT_TAG_MODULE 3
 #define MULTIBOOT_TAG_MEMORY_MAP 6
 #define MULTIBOOT_MEMORY_AVAILABLE 1
 #define MULTIBOOT_TAG_ALIGNMENT 8
@@ -29,6 +30,14 @@ struct multiboot_memory_map_tag {
     uint32_t size;
     uint32_t entry_size;
     uint32_t entry_version;
+};
+
+struct multiboot_module_tag {
+    uint32_t type;
+    uint32_t size;
+    uint32_t start;
+    uint32_t finish;
+    char command_line[];
 };
 
 struct multiboot_memory_map_entry {
@@ -86,6 +95,11 @@ static void mark_frame_free(uint64_t frame) {
 }
 
 static void reserve_range(uintptr_t start, uintptr_t finish) {
+    if (start >= finish || start >= IDENTITY_MAP_LIMIT)
+        return;
+    if (finish > IDENTITY_MAP_LIMIT)
+        finish = IDENTITY_MAP_LIMIT;
+
     uint64_t first = start / PMM_PAGE_SIZE;
     uint64_t last = align_up(finish, PMM_PAGE_SIZE) / PMM_PAGE_SIZE;
 
@@ -95,22 +109,58 @@ static void reserve_range(uintptr_t start, uintptr_t finish) {
         mark_frame_used(frame);
 }
 
-static struct multiboot_memory_map_tag *find_memory_map(
+static bool valid_memory_map(const struct multiboot_memory_map_tag *map) {
+    /* Larger records and future versions retain the common 24-byte prefix. */
+    return map->size >= sizeof(*map)
+        && map->entry_size >= sizeof(struct multiboot_memory_map_entry)
+        && map->entry_size % MULTIBOOT_TAG_ALIGNMENT == 0
+        && (map->size - sizeof(*map)) % map->entry_size == 0;
+}
+
+static bool valid_module(const struct multiboot_module_tag *module) {
+    if (module->size <= sizeof(*module) || module->start > module->finish)
+        return false;
+
+    for (size_t i = 0; i < module->size - sizeof(*module); i++) {
+        if (module->command_line[i] == '\0')
+            return true;
+    }
+    return false;
+}
+
+static const struct multiboot_memory_map_tag *find_memory_map(
         uintptr_t multiboot_address, uintptr_t multiboot_end) {
     uintptr_t cursor = multiboot_address + sizeof(struct multiboot_header);
+    const struct multiboot_memory_map_tag *memory_map = NULL;
 
-    while (cursor + sizeof(struct multiboot_tag) <= multiboot_end) {
-        struct multiboot_tag *tag = (struct multiboot_tag *)cursor;
+    while (multiboot_end - cursor >= sizeof(struct multiboot_tag)) {
+        const struct multiboot_tag *tag = (const struct multiboot_tag *)cursor;
+        uintptr_t remaining = multiboot_end - cursor;
+        uintptr_t padded_size;
 
-        if (tag->type == MULTIBOOT_TAG_END)
-            break;
         if (tag->size < sizeof(struct multiboot_tag)
-                || cursor + tag->size > multiboot_end)
+                || tag->size > remaining)
             return NULL;
-        if (tag->type == MULTIBOOT_TAG_MEMORY_MAP)
-            return (struct multiboot_memory_map_tag *)tag;
+        if (tag->type == MULTIBOOT_TAG_END)
+            return tag->size == sizeof(*tag) && remaining == sizeof(*tag)
+                ? memory_map : NULL;
+        if (tag->type == MULTIBOOT_TAG_MEMORY_MAP) {
+            const struct multiboot_memory_map_tag *candidate =
+                (const struct multiboot_memory_map_tag *)tag;
 
-        cursor = align_up(cursor + tag->size, MULTIBOOT_TAG_ALIGNMENT);
+            /* Multiple maps are ambiguous; do not silently pick one. */
+            if (memory_map != NULL || !valid_memory_map(candidate))
+                return NULL;
+            memory_map = candidate;
+        } else if (tag->type == MULTIBOOT_TAG_MODULE
+                && !valid_module((const struct multiboot_module_tag *)tag)) {
+            return NULL;
+        }
+
+        padded_size = align_up(tag->size, MULTIBOOT_TAG_ALIGNMENT);
+        if (padded_size > remaining)
+            return NULL;
+        cursor += padded_size;
     }
 
     return NULL;
@@ -128,14 +178,10 @@ static uint64_t clipped_entry_end(
     return entry->address + entry->length;
 }
 
-static bool configure_frames(struct multiboot_memory_map_tag *memory_map) {
+static bool configure_frames(const struct multiboot_memory_map_tag *memory_map) {
     uintptr_t entries_start = (uintptr_t)memory_map + sizeof(*memory_map);
     uintptr_t entries_end = (uintptr_t)memory_map + memory_map->size;
     uint64_t highest_address = 0;
-
-    if (memory_map->size < sizeof(*memory_map)
-            || memory_map->entry_size < sizeof(struct multiboot_memory_map_entry))
-        return false;
 
     for (uintptr_t cursor = entries_start;
             cursor + memory_map->entry_size <= entries_end;
@@ -144,7 +190,7 @@ static bool configure_frames(struct multiboot_memory_map_tag *memory_map) {
             (struct multiboot_memory_map_entry *)cursor;
         uint64_t entry_end = clipped_entry_end(entry);
 
-        if (entry_end > highest_address)
+        if (entry->length != 0 && entry_end > highest_address)
             highest_address = entry_end;
     }
 
@@ -173,18 +219,55 @@ static bool configure_frames(struct multiboot_memory_map_tag *memory_map) {
             mark_frame_free(frame);
     }
 
+    /* Restrictive entries win regardless of firmware map ordering. Even one
+     * unavailable byte makes its containing page unsafe for allocation. */
+    for (uintptr_t cursor = entries_start; cursor < entries_end;
+            cursor += memory_map->entry_size) {
+        const struct multiboot_memory_map_entry *entry =
+            (const struct multiboot_memory_map_entry *)cursor;
+
+        if (entry->type != MULTIBOOT_MEMORY_AVAILABLE && entry->length != 0)
+            reserve_range(entry->address, clipped_entry_end(entry));
+    }
+
     return true;
 }
 
+static void reserve_modules(uintptr_t multiboot_address,
+                            uintptr_t multiboot_end) {
+    uintptr_t cursor = multiboot_address + sizeof(struct multiboot_header);
+
+    /* The complete chain has already been validated by find_memory_map. */
+    while (cursor < multiboot_end) {
+        const struct multiboot_tag *tag = (const struct multiboot_tag *)cursor;
+
+        if (tag->type == MULTIBOOT_TAG_END)
+            break;
+        if (tag->type == MULTIBOOT_TAG_MODULE) {
+            const struct multiboot_module_tag *module =
+                (const struct multiboot_module_tag *)tag;
+            reserve_range(module->start, module->finish);
+        }
+        cursor += align_up(tag->size, MULTIBOOT_TAG_ALIGNMENT);
+    }
+}
+
 bool pmm_init(uintptr_t multiboot_info_address) {
-    struct multiboot_header *header =
-        (struct multiboot_header *)multiboot_info_address;
+    const struct multiboot_header *header;
     uintptr_t multiboot_end;
-    struct multiboot_memory_map_tag *memory_map;
+    const struct multiboot_memory_map_tag *memory_map;
+
+    /* Fail closed on every unsuccessful initialization, including retries. */
+    frame_count = 0;
+    used_frame_count = 0;
 
     if (multiboot_info_address == 0
-            || multiboot_info_address >= IDENTITY_MAP_LIMIT
-            || header->total_size < sizeof(*header)
+            || multiboot_info_address % MULTIBOOT_TAG_ALIGNMENT != 0
+            || multiboot_info_address > IDENTITY_MAP_LIMIT - sizeof(*header))
+        return false;
+    header = (const struct multiboot_header *)multiboot_info_address;
+    if (header->total_size < sizeof(*header) + sizeof(struct multiboot_tag)
+            || header->total_size % MULTIBOOT_TAG_ALIGNMENT != 0
             || header->total_size > IDENTITY_MAP_LIMIT - multiboot_info_address)
         return false;
 
@@ -195,7 +278,13 @@ bool pmm_init(uintptr_t multiboot_info_address) {
 
     reserve_range(0, (uintptr_t)end);
     reserve_range(multiboot_info_address, multiboot_end);
-    return used_frame_count < frame_count;
+    reserve_modules(multiboot_info_address, multiboot_end);
+    if (used_frame_count == frame_count) {
+        frame_count = 0;
+        used_frame_count = 0;
+        return false;
+    }
+    return true;
 }
 
 uintptr_t pmm_alloc(void) {
