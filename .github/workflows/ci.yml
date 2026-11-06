@@ -32,8 +32,18 @@ jobs:
           sudo apt-get install -y nasm gcc make binutils \
             xorriso grub-pc-bin grub-common mtools qemu-system-x86
 
+      - name: Record toolchain versions and host ISA defaults
+        run: |
+          gcc --version
+          gcc -Q --help=target | grep -E 'march=|mtune=|mbmi'
+          nasm -v
+          grub-mkrescue --version
+          qemu-system-x86_64 --version
+
       - name: Build ISO
-        run: make clean && make iso
+        run: |
+          make clean && make iso
+          objdump -d build/kernel.bin > build/kernel.disassembly
 
       - name: Smoke-boot in QEMU and check serial output
         run: |
@@ -73,6 +83,9 @@ jobs:
       - name: Exercise the real PS/2 shell and fault diagnostic
         run: make test-interactive
 
+      - name: Verify baseline ISA overrides newer compiler defaults
+        run: make test BUILD=build/isa-baseline CC="gcc -march=x86-64-v3"
+
       - name: Preserve boot and self-test logs
         if: always()
         uses: actions/upload-artifact@v4
@@ -82,3 +95,4 @@ jobs:
             serial.log
             build/selftest-*.log
             build/interactive-*.log
+            build/kernel.disassembly

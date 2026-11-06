@@ -34,6 +34,12 @@ Before touching long mode we verify the environment:
 
 If any check fails we print `ERR: <n>` to the VGA buffer and halt.
 
+The C build explicitly targets baseline `x86-64`, matching the long-mode feature
+check. It must not inherit a host compiler's `x86-64-v3` default: such a compiler
+can emit BMI2 shifts even when SSE is disabled, faulting on a generic QEMU CPU
+before the IDT exists. CI additionally builds with a simulated v3 compiler
+default and boots the result to verify that the kernel flags take precedence.
+
 ### 3. Paging: the price of admission to long mode
 
 x86-64 **requires paging to be enabled** before entering long mode. We build a

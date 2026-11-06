@@ -21,6 +21,9 @@ to follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   limitations, and standardized first-party Markdown punctuation.
 
 ### Fixed
+- Explicitly target the baseline x86-64 ISA instead of inheriting a newer host
+  compiler default. This prevents pre-IDT faults on generic QEMU CPUs when
+  building with Ubuntu 26.04's x86-64-v3 toolchain.
 - Clear the unspecified bootloader direction flag before calling C, and erase
   deleted characters on serial terminals as well as VGA during line editing.
 - Physical allocation preserves boot modules and every reserved overlap,

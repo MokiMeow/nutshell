@@ -16,7 +16,10 @@ GRUB_MKRESCUE := grub-mkrescue
 HOST_CC       ?= gcc
 HOST_CFLAGS   ?= -O2 -g -Wall -Wextra -Werror
 
-CFLAGS  := -std=c11 -m64 -ffreestanding -fno-pic -fno-pie \
+# Do not inherit a distribution compiler's newer ISA default: the boot checks
+# promise baseline long mode, and QEMU's generic CPU need not support BMI/AVX.
+CFLAGS  := -std=c11 -m64 -march=x86-64 -mtune=generic \
+           -ffreestanding -fno-pic -fno-pie \
            -mno-red-zone -mno-mmx -mno-sse -mno-sse2 \
            -fno-stack-protector -fno-asynchronous-unwind-tables \
            -Wall -Wextra -Werror -MMD -MP -Iinclude -c
