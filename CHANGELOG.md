@@ -7,6 +7,10 @@ to follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ## [Unreleased]
 
 ### Added
+- A headless `make test-interactive` runner that drives real PS/2 input through
+  echo, Shift symbols, editing, command recovery, overflow and panic diagnostics.
+- A boot ABI regression that deliberately sets the direction flag before entry
+  normalization and verifies it is clear when C code starts.
 - Synthetic Multiboot2 memory-map regressions in the QEMU test kernel and a
   GCC-only `make test-host` target, including 12,288 tag-byte mutations and
   address/undefined-behavior sanitizer CI coverage.
@@ -17,6 +21,8 @@ to follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   limitations, and standardized first-party Markdown punctuation.
 
 ### Fixed
+- Clear the unspecified bootloader direction flag before calling C, and erase
+  deleted characters on serial terminals as well as VGA during line editing.
 - Physical allocation preserves boot modules and every reserved overlap,
   validates complete boot tag chains before use, and fails closed on invalid
   initialization. Extensible memory-map versions and ignored reserved fields

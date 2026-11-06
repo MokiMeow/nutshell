@@ -44,7 +44,7 @@ TEST_OBJ     := $(TEST_ASM_OBJ) $(TEST_C_OBJ)
 HOST_PMM_TEST := $(BUILD)/host/pmm-test
 HOST_PMM_SRC  := src/pmm.c src/pmm_test.c src/string.c
 
-.PHONY: all iso test-iso test test-host run debug clean
+.PHONY: all iso test-iso test test-host test-interactive run debug clean
 
 all: $(KERNEL)
 
@@ -61,7 +61,7 @@ $(BUILD):
 	mkdir -p $(BUILD)
 
 $(TEST_BUILD)/%.o: boot/%.asm | $(TEST_BUILD)
-	$(NASM) -f elf64 $< -o $@
+	$(NASM) -f elf64 -DKERNEL_TEST $< -o $@
 
 $(TEST_BUILD)/%.o: src/%.c | $(TEST_BUILD)
 	$(CC) $(CFLAGS) -DKERNEL_TEST $< -o $@
@@ -102,6 +102,9 @@ $(HOST_PMM_TEST): $(HOST_PMM_SRC) include/pmm.h include/string.h
 test-host: $(HOST_PMM_TEST)
 	$(HOST_PMM_TEST)
 	@echo "[ok] host-pmm-map"
+
+test-interactive: $(ISO)
+	QEMU="$(QEMU)" QEMU_MEMORY="$(QEMU_MEMORY)" bash tests/run-interactive.sh $(ISO)
 
 # Boot the kernel. Serial output is mirrored to your terminal.
 run: $(ISO)

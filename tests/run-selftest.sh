@@ -37,6 +37,7 @@ if [[ $status -ne 1 ]]; then
     exit 1
 fi
 
+grep -Fq "[ok] test-boot-df" "$log"
 grep -Fq "[ok] test-pmm-map" "$log"
 grep -Fq "[ok] test-pmm" "$log"
 grep -Fq "[ok] test-heap" "$log"

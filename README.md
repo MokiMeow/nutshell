@@ -79,6 +79,7 @@ can report the vector and register state instead of silently rebooting.
 make run                 # build the ISO and boot Nutshell in QEMU
 make test                # run PMM, heap, and scripted-shell tests in QEMU
 make test-host           # fast memory-map regressions, GCC only
+make test-interactive    # real PS/2 typing, editing, recovery, and fault tests
 ```
 
 You should see Nutshell boot into 64-bit long mode and print its banner.

@@ -102,6 +102,25 @@ edit rebuilds affected objects. Compiler warnings fail the build. A self-test
 timeout is reported separately from an explicit guest failure; it can mean
 either a slow host or a hung guest, and requires inspecting the serial log.
 
+## Interactive input regression
+
+`make test-interactive` boots the normal ISO and sends key events through QEMU's
+local monitor. Unlike `shell_execute` unit calls, this exercises the real PS/2
+IRQ, scancode decoder, ring buffer and line reader. It checks echo, Shift
+symbols, backspace editing (including serial erasure), unknown-command recovery,
+help/mem/uptime, line overflow and recovery, then the deliberate divide-error
+fault report. Assertions match complete output lines, not just input echo.
+
+The Bash runner uses a private FIFO, not a network listener. It preserves
+`build/interactive-serial.log` and `build/interactive-monitor.log`, stops QEMU
+on exit, and defaults to a 60-second overall timeout. Override
+`INTERACTIVE_TIMEOUT` or `INTERACTIVE_KEY_DELAY` on unusually slow hosts. Do not
+run multiple copies concurrently because their retained log paths are shared.
+
+The test image also reports `[ok] test-boot-df` after verifying that entry to C
+cleared an intentionally set direction flag. This catches an ABI violation that
+normal firmware or unoptimized C loops can otherwise hide.
+
 ## Common failure modes
 
 | Symptom | Likely cause |

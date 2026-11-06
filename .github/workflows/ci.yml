@@ -6,6 +6,9 @@ on:
   pull_request:
     branches: [ main ]
 
+permissions:
+  contents: read
+
 jobs:
   host-memory-tests:
     runs-on: ubuntu-latest
@@ -64,7 +67,11 @@ jobs:
         run: |
           for memory in 16M 64M 256M; do
             make test QEMU_MEMORY="$memory"
+            cp build/selftest-serial.log "build/selftest-${memory}.log"
           done
+
+      - name: Exercise the real PS/2 shell and fault diagnostic
+        run: make test-interactive
 
       - name: Preserve boot and self-test logs
         if: always()
@@ -73,4 +80,5 @@ jobs:
           name: kernel-serial-logs
           path: |
             serial.log
-            build/selftest-serial.log
+            build/selftest-*.log
+            build/interactive-*.log

@@ -19,6 +19,10 @@ long_mode_start:
     mov fs, ax
     mov gs, ax
 
+%ifdef KERNEL_TEST
+    std                         ; exercise entry with an unspecified loader DF
+%endif
+    cld                         ; SysV C ABI requires forward string operations
     mov edi, [rel multiboot_info] ; SysV arg 1: multiboot2 pointer
     call kernel_main
 

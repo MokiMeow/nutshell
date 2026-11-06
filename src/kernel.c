@@ -31,6 +31,10 @@ static void init_failure(const char *subsystem) {
 }
 
 void kernel_main(uintptr_t multiboot_info_address) {
+#ifdef KERNEL_TEST
+    uintptr_t entry_flags;
+    __asm__ volatile ("pushfq; popq %0" : "=r"(entry_flags));
+#endif
     gdt_init();
     serial_init();
     vga_clear();
@@ -40,6 +44,9 @@ void kernel_main(uintptr_t multiboot_info_address) {
     kprintf("[ok] vga\n");
 
 #ifdef KERNEL_TEST
+    if ((entry_flags & (1U << 10)) != 0)
+        init_failure("boot-direction-flag");
+    kprintf("[ok] test-boot-df\n");
     int memory_test_line = pmm_map_self_test();
     if (memory_test_line != 0) {
         kprintf("[FAIL] test-pmm-map at line %d\n", memory_test_line);

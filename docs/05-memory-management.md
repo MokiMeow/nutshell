@@ -55,7 +55,7 @@ This makes reserved regions win over overlapping available regions regardless
 of entry order. Empty ranges do nothing, and range clipping occurs before
 rounding so large firmware lengths cannot wrap around.
 
-Before touching allocator state, the parser checks the aligned boot-info
+Before exposing free frames, the parser checks the aligned boot-info
 envelope and every tag, including tags after the memory map. It requires a
 final eight-byte end tag, complete memory-map entries, and well-formed module
 descriptors. Unknown tags, larger entry strides, future compatible memory-map

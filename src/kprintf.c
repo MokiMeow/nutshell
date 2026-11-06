@@ -14,6 +14,10 @@ static void kputc(char character) {
     if (character == '\n')
         serial_putc('\r');
     serial_putc(character);
+    if (character == '\b') {
+        serial_putc(' ');
+        serial_putc('\b');
+    }
 }
 
 static int kputs(const char *string) {

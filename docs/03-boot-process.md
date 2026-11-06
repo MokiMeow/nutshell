@@ -68,7 +68,11 @@ instructions.
 
 The 64-bit stub zeroes the data segment registers (segmentation is effectively
 off in long mode, but the registers should hold the null selector) and `call`s
-`kernel_main`. If `kernel_main` ever returns, we halt in a loop.
+`kernel_main`. Before entering C it clears the direction flag with `cld`.
+Multiboot2 leaves that flag unspecified, while the SysV AMD64 ABI requires it
+clear on function entry. The test image deliberately sets DF immediately before
+this normalization and checks the flags captured on C entry. If `kernel_main`
+ever returns, we halt in a loop.
 
 The two-entry GDT used for this transition is deliberately temporary. The
 first operation in `kernel_main` is `gdt_init()`, which installs the runtime
@@ -91,5 +95,7 @@ loads the task register.
 
 - OSDev Wiki: [Setting Up Long Mode](https://wiki.osdev.org/Setting_Up_Long_Mode)
 - OSDev Wiki: [Multiboot2](https://wiki.osdev.org/Multiboot)
+- GNU: [Multiboot2 machine state](https://www.gnu.org/software/grub/manual/multiboot2/html_node/Machine-state.html)
+- [SysV AMD64 ABI](https://gitlab.com/x86-psABIs/x86-64-ABI)
 - Philipp Oppermann: [Entering Long Mode](https://os.phil-opp.com/entering-longmode/)
   (Rust series, but the assembly bring-up maps directly to ours)
