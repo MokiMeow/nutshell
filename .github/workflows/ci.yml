@@ -9,9 +9,15 @@ on:
 permissions:
   contents: read
 
+# Only the latest commit on each branch or pull request needs a full run.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   host-memory-tests:
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
       - name: Run optimized allocator regressions and tag mutations
@@ -23,10 +29,12 @@ jobs:
 
   build-and-boot:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
 
       - name: Install toolchain
+        timeout-minutes: 5
         run: |
           sudo apt-get update
           sudo apt-get install -y nasm gcc make binutils \
